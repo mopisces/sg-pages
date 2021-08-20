@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<van-dropdown-menu>
-			<van-dropdown-item v-model="formData.activeItem" :options="config.dropDownOption" />
+			<van-dropdown-item v-model="selectItem" :options="dropDownOption" />
 		</van-dropdown-menu>
 		<template v-if="config.updown">
 			<table class="monitor-info">
@@ -332,6 +332,7 @@
 	</div>
 </template>
 <script>
+	import { mapGetters } from 'vuex'
 	import { secondsFormat } from '@/utils';
 	import Highcharts from 'highcharts/highstock';
 	import io from 'socket.io-client';
@@ -339,7 +340,6 @@
 		data(){
 			return {
 				config:{
-					dropDownOption : [],
 					updown : true,
 					isnew  : true,
 					notice : {
@@ -352,7 +352,7 @@
 					}
 				},
 				formData:{
-					activeItem : 0
+					/*activeItem : 0*/
 				},
 				socket:{},  //socket链接对象
 				className:'-',
@@ -476,7 +476,7 @@
 		},
 		methods:{
 			getConfig(){
-				let self = this;
+				/*let self = this;
 				this.$request.common.getConfig().then(res=>{
 					if( res.errorCode == '00000' ){
 						res.result.forEach((item,index)=>{
@@ -485,13 +485,19 @@
 					}
 				}).then(()=>{
 					this.$nextTick(()=>{
-						this.config.updown = this.config.dropDownOption[ this.formData.activeItem ].updown;
-						this.config.isnew = this.config.dropDownOption[ this.formData.activeItem ].isnew;
-						this.getSocket(this.config.dropDownOption[ this.formData.activeItem ].socketUrl,this.formData.activeItem)
+						this.config.updown = this.config.dropDownOption[ this.selectItem ].updown;
+						this.config.isnew = this.config.dropDownOption[ this.selectItem ].isnew;
+						this.getSocket(this.config.dropDownOption[ this.selectItem ].socketUrl,this.selectItem)
 					});
-				});;
+				});;*/
+				this.config.updown = this.dropDownOption[ this.selectItem ].updown
+				this.config.isnew = this.dropDownOption[ this.selectItem ].isnew
+				this.getSocket(this.dropDownOption[ this.selectItem ].socketUrl,this.selectItem)
+				console.log()
 			},
 			getSocket( socketUrl, index ){
+				this.clearData()
+
 				this.socket = io(socketUrl,{
 					timeout:3000
 				});
@@ -510,49 +516,48 @@
 						let udpData = JSON.parse(data).data
 						this.className = udpData.class
 						if( this.config.updown ){
-							Object.assign(this.updownInfo, udpData);
+							Object.assign(this.updownInfo, udpData)
 						}else{
-							Object.assign(this.normalInfo, udpData);
+							Object.assign(this.normalInfo, udpData)
 						}
-
-						if( !this.config.chart.show ) return;
+						if( !this.config.chart.show ) return
 						if( this.config.updown ){
 							if( this.config.chart.keyName.indexOf('_') === -1 ){
-								this.chart.series[0].addPoint([(new Date()).getTime(),this.updownInfo[this.config.chart.keyName]],true,true);
+								this.chart.series[0].addPoint([(new Date()).getTime(),this.updownInfo[this.config.chart.keyName]],true,true)
 							}else{
 								let keyArr = this.config.chart.keyName.split('_');
-								this.chart.series[0].addPoint([(new Date()).getTime(),this.updownInfo[keyArr[0]][keyArr[1]]],true,true);
+								this.chart.series[0].addPoint([(new Date()).getTime(),this.updownInfo[keyArr[0]][keyArr[1]]],true,true)
 							}
 						}else{
 							if( this.config.chart.keyName.indexOf('_') === -1 ){
-								this.chart.series[0].addPoint([(new Date()).getTime(),this.normalInfo[this.config.chart.keyName]],true,true);
+								this.chart.series[0].addPoint([(new Date()).getTime(),this.normalInfo[this.config.chart.keyName]],true,true)
 							}else{
 								let keyArr = this.config.chart.keyName.split('_');
-								this.chart.series[0].addPoint([(new Date()).getTime(),this.normalInfo[keyArr[0]][keyArr[1]]],true,true);
+								this.chart.series[0].addPoint([(new Date()).getTime(),this.normalInfo[keyArr[0]][keyArr[1]]],true,true)
 							}
 						}
 					}
 				});
 				this.socket.on('connect_error',(error)=>{
-					this.config.notice.text = '链接失败,后台服务暂未开启！';
+					this.config.notice.text = '链接失败,后台服务暂未开启！'
 				});
 				this.socket.on('connect_timeout',(timeout)=>{
-					this.config.notice.text = '超时链接,后台服务暂未开启！';
+					this.config.notice.text = '超时链接,后台服务暂未开启！'
 				});
 				this.socket.on('error',(error)=>{
-					this.config.notice.text = '链接错误';
+					this.config.notice.text = '链接错误'
 				});
 				this.socket.on('disconnect',(error)=>{
 					console.log('disconnect')
-					this.config.notice.text = 'disconnect';
+					this.config.notice.text = 'disconnect'
 				});
 			},
 			buildChart( xTitle, yTitle, keyName ){
 				let className = '';
 				if( this.config.updown ){
-					className = this.updownInfo.class;
+					className = this.updownInfo.class
 				}else{
-					className = this.normalInfo.class;
+					className = this.normalInfo.class
 				}
 				this.chart = new Highcharts.chart('chart-container',{
 					chart:{
@@ -584,7 +589,7 @@
 					},
 					tooltip:{
 						formatter : function() {
-							return '<b>' + this.series.name + '</b><br/>' + Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' + Highcharts.numberFormat(this.y, 2);
+							return '<b>' + this.series.name + '</b><br/>' + Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' + Highcharts.numberFormat(this.y, 2)
 						}
 					},
 					legend:{
@@ -599,9 +604,9 @@
 								data.push({
 									x: (new Date()).getTime() + i * 1000,
 									y: 0
-								});
+								})
 							}
-							return data;
+							return data
 						}())
 					}]
 				});
@@ -609,14 +614,29 @@
 				this.config.chart.keyName = keyName;
 				this.config.chart.show    = true;
 			},
+			selectItemChange( idx ){
+				this.config.updown = this.dropDownOption[ idx ].updown
+				this.config.isnew  = this.dropDownOption[ idx ].isnew
+				if( this.config.chart.show ){
+					this.chart.setSize(undefined,1)
+				}
+				this.socket.close()
+				this.config.notice.text = ''
+				this.getSocket(this.dropDownOption[ idx ].socketUrl, idx)
+			},
 			timeFormat( seconds ){
-				return secondsFormat( seconds );
+				return secondsFormat( seconds )
+			},
+			clearData(){
+				this.updownInfo = this.$options.data().updownInfo
+				this.normalInfo = this.$options.data().normalInfo
 			}
 		},
 		created(){
 			this.$store.commit('layout/setTitle','生管监控')
 			this.$store.commit('layout/setActive','monitor')
-			this.getConfig();
+			this.getConfig()
+
 		},
 		mounted(){
 			Highcharts.setOptions({
@@ -629,25 +649,22 @@
 			
 		},
 		destroyed(){
-			this.socket.close();
+			this.socket.close()
 		},
 		computed:{
-			activeItemChange(){
-				return this.formData.activeItem;
+			...mapGetters({
+				dropDownOption:'layout/dbItem'
+			}),
+			selectItem:{
+				get () {
+					return this.$store.state.layout.dropDownIndex
+				},
+				set (value) {
+					this.$store.commit('layout/setDropDownIndex', value)
+					this.selectItemChange( value )
+				}
 			}
 		},
-		watch:{
-			activeItemChange( newV, oldV ){
-				this.config.updown = this.config.dropDownOption[ newV ].updown;
-				this.config.isnew  = this.config.dropDownOption[ newV ].isnew;
-				if( this.config.chart.show ){
-					this.chart.setSize(undefined,1);
-				}
-				this.socket.close();
-				this.config.notice.text = '';
-				this.getSocket(this.config.dropDownOption[ newV ].socketUrl, newV);
-			}
-		}
 	}
 </script>
 <style>

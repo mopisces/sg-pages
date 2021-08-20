@@ -1,3 +1,4 @@
+import store from '@/store'
 /*登录*/
 const login = () => import('@/views/login/Index')
 /*布局*/
@@ -94,6 +95,15 @@ let routes = [
 let router = new VueRouter({
 	routes: routes,
     mode: 'history'
+})
+
+router.beforeResolve(async (to, from, next) => {
+    try{
+        if( store.state.layout.dbItem.length == 0 ) await store.dispatch('layout/getSelectConfig')
+    }catch(err){
+        console.log(err)
+    }
+    next()
 })
 
 export default router

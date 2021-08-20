@@ -1,4 +1,4 @@
-import { get, post } from '@/request/request'
+import { get } from '@/request/request'
 
 const common = {
 	getConfig(){

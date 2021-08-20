@@ -2,7 +2,7 @@
 	<div>
 		<van-sticky :offset-top="46">
 			<van-dropdown-menu>
-				<van-dropdown-item v-model="formData.configIndex" :options="config.dropDownOption" />
+				<van-dropdown-item v-model="selectItem" :options="dropDownOption" />
 			</van-dropdown-menu>
 		</van-sticky>
 		<van-divider :style="{color: '#1989fa', borderColor: '#1989fa', padding: '0 16px'}" v-if="formData.id">
@@ -45,15 +45,14 @@
 </template>
 <script>
 	import axios from 'axios'
+	import { mapGetters } from 'vuex'
 	export default {
 		data(){
 			return {
 				config : {
-					dropDownOption : [],
 					isnew : false
 				},
 				formData : {
-					configIndex : 0,
 					id : '',
 					sliderValue : 0
 				},
@@ -63,7 +62,7 @@
 		},
 		methods:{
 			getConfig(){
-				let self = this;
+				/*let self = this;
 				this.$request.common.getConfig().then(res=>{
 					if( res.errorCode == '00000' ){
 						res.result.forEach((item,index)=>{
@@ -74,7 +73,8 @@
 					this.$nextTick(()=>{
 						this.config.isnew = this.config.dropDownOption[ this.formData.configIndex ].isnew;
 					})
-				});
+				});*/
+				this.config.isnew = this.dropDownOption[ this.selectItem ].isnew
 			},
 			stepperChange(value,detail){
 				this.formData.sliderValue = Number(value);
@@ -108,11 +108,12 @@
 			},
 			getValue(){
 				let self = this;
-				this.$request.alter.getValue( this.formData ).then(res=>{
+				let postData = Object.assign({}, {configIndex:this.selectItem}, this.formData)
+				this.$request.alter.getValue( postData ).then(res=>{
 					if( res.errorCode != '00000' ){
 						return ;
 					}
-					if( !self.config.dropDownOption[ self.formData.configIndex ].isnew ){
+					if( !self.dropDownOption[ self.selectItem ].isnew ){
 						self.formData.id = res.result.id;
 						self.value = res.result.value;
 					}else{
@@ -122,7 +123,8 @@
 			},
 			changeVal(){
 				let self = this;
-				this.$request.alter.changeVal( this.formData ).then(res=>{
+				let postData = Object.assign({}, {configIndex:this.selectItem}, this.formData)
+				this.$request.alter.changeVal( postData ).then(res=>{
 					if( res.errorCode == '00000' ){
 						let record = {
 							configIndex:self.formData.configIndex,
@@ -170,19 +172,33 @@
 			sliderChange(){
 				return this.formData.sliderValue;
 			},
-			configIndexChange(){
+			/*configIndexChange(){
 				return this.formData.configIndex;
+			},*/
+			...mapGetters({
+				dropDownOption:'layout/dbItem'
+			}),
+			selectItem:{
+				get () {
+					return this.$store.state.layout.dropDownIndex
+				},
+				set (value) {
+					this.$store.commit('layout/setDropDownIndex', value)
+					this.recordList = [];
+					this.config.isnew = this.dropDownOption[ value ].isnew;
+					this.getRecord()
+				}
 			}
 		},
 		watch:{
 			sliderChange( newV, oldV ){
 				this.value = Number( newV );
 			},
-			configIndexChange( newV, oldV ){
+			/*configIndexChange( newV, oldV ){
 				this.recordList = [];
 				this.config.isnew = this.config.dropDownOption[ newV ].isnew;
 				this.getRecord();
-			}
+			}*/
 		}
 	}
 </script>

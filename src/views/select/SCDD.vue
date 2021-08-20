@@ -2,7 +2,7 @@
 	<div>
 		<van-sticky :offset-top="46">
 			<van-dropdown-menu>
-				<van-dropdown-item v-model="formData.activeItem" :options="config.dropDownOption" />
+				<van-dropdown-item v-model="selectItem" :options="dropDownOption" />
 				<van-dropdown-item title="筛选" ref="filter">
 					<van-field label="序号" v-model="formData.sn" placeholder="精确查询" input-align="center"/>
 					<van-field label="订单号" v-model="formData.orderNumber" placeholder="精确查询" input-align="center"/>
@@ -114,6 +114,7 @@
 </template>
 <script>
 	import { getUserInfo } from '@/utils'
+	import { mapGetters } from 'vuex'
 	export default {
 		data(){
 			return {
@@ -132,7 +133,6 @@
 					isnew  : false
 				},
 				formData:{
-					activeItem  : 0,
 					sn          : '',
 					orderNumber : '',
 					companyName : '',
@@ -159,19 +159,16 @@
 				this.getScdd()
 			},
 			resetClick(){
-				this.formData.sn          = ''
-				this.formData.orderNumber = ''
-				this.formData.companyName = ''
-				this.formData.paperCode   = ''
-				this.formData.fluteType   = ''
-				this.formData.width       = ''
+				this.formData = this.$options.data().formData
 			},
 			filterClick(){
 				this.$refs.filter.toggle()
 				this.pullOnRefresh()
 			},
 			getScdd(){
-				this.$request.select.getScdd( this.formData ).then(res=>{
+				let postData = Object.assign({},{activeItem:this.selectItem},this.formData)
+
+				this.$request.select.getScdd( postData ).then(res=>{
 					if( res.errorCode == '00000' ){
 						let maxLength = 3
 						if( this.config.updown ){
@@ -189,17 +186,9 @@
 				})
 			},
 			getDropDown(){
-				this.$request.common.getConfig().then(res=>{
-					if( res.errorCode == '00000' ){
-						res.result.forEach((item,index)=>{
-							this.config.dropDownOption.push({text:item.DB_FLAG,value:index,isnew:item.isnew,updown:item.updown})
-						});
-						this.config.updown = this.config.dropDownOption[ 0 ].updown == 0 ? false : true
-						this.config.isnew = this.config.dropDownOption[ 0 ].isnew == 0 ? false : true
-					}
-				}).then(()=>{
-					this.getScdd()
-				})
+				this.config.updown = this.dropDownOption[ this.selectItem ].updown == 0 ? false : true
+				this.config.isnew = this.dropDownOption[ this.selectItem ].isnew == 0 ? false : true
+				this.getScdd()
 			},
 			init(){
 				this.$store.commit('layout/setTitle','生产订单')
@@ -225,17 +214,22 @@
 			
 		},
 		computed:{
-			activeItemChange(){
-				return this.formData.activeItem
+			...mapGetters({
+				dropDownOption:'layout/dbItem'
+			}),
+			selectItem:{
+				get () {
+					return this.$store.state.layout.dropDownIndex
+				},
+				set (value) {
+					this.$store.commit('layout/setDropDownIndex', value)
+					this.config.updown = this.dropDownOption[ value ].updown == 0 ? false : true
+					this.config.isnew  = this.dropDownOption[ value ].isnew == 0 ? false : true
+					this.pullOnRefresh()
+				}
 			}
 		},
-		watch:{
-			activeItemChange( newV, oldV ){
-				this.config.updown = this.config.dropDownOption[ newV ].updown == 0 ? false : true;
-				this.config.isnew  = this.config.dropDownOption[ newV ].isnew == 0 ? false : true;
-				this.pullOnRefresh();
-			}
-		}
+		watch:{}
 	}
 </script>
 <style type="text/css">

@@ -4,7 +4,7 @@
 			<van-row>
 				<van-col span="12">
 					<van-dropdown-menu>
-						<van-dropdown-item v-model="formData.activeItem" :options="config.dropDownOption" />
+						<van-dropdown-item v-model="selectItem" :options="dropDownOption" />
 					</van-dropdown-menu>
 				</van-col>
 				<van-col span="12">
@@ -123,6 +123,7 @@
 	</div>
 </template>
 <script>
+	import { mapGetters } from 'vuex'
 	import { getUserInfo } from '@/utils'
 	import PopupFilter from '@/components/PopupFilter.vue'
 	import NewTimePicker from '@/components/NewTimePicker.vue'
@@ -158,7 +159,6 @@
 					}
 				},
 				formData:{
-					activeItem  : 0,
 					sn          : '',
 					orderNumber : '',
 					companyName : '',
@@ -204,16 +204,8 @@
 				this.getWgdd();
 			},
 			getDropDown(){
-				let self = this;
-				this.$request.common.getConfig().then(res=>{
-					if( res.errorCode == '00000' ){
-						res.result.forEach((item,index)=>{
-							self.config.dropDownOption.push({text:item.DB_FLAG,value:index,isnew:item.isnew,updown:item.updown});
-						});
-						self.config.updown = self.config.dropDownOption[ 0 ].updown == 0 ? false : true;
-						self.config.isnew = self.config.dropDownOption[ 0 ].isnew == 0 ? false : true;
-					}
-				});
+				this.config.updown = this.dropDownOption[ this.selectItem ].updown == 0 ? false : true
+				this.config.isnew = this.dropDownOption[ this.selectItem ].isnew == 0 ? false : true
 			},
 			getConfig( isRest = false ){
 				let self = this;
@@ -237,9 +229,11 @@
 			},
 			getWgdd(){
 				let self = this;
-				this.$request.select.getWgdd( this.formData ).then(res=>{
+				let postData = Object.assign({},{activeItem:this.selectItem},this.formData)
+
+				this.$request.select.getWgdd( postData ).then(res=>{
 					if( res.errorCode == '00000' ){
-						let maxLength = 3;
+						let maxLength = 3
 						if( self.config.updown ){
 							maxLength = 6
 						}
@@ -291,16 +285,23 @@
 			}
 		},
 		computed:{
-			activeItemChange(){
-				return this.formData.activeItem;
+			...mapGetters({
+				dropDownOption:'layout/dbItem'
+			}),
+			selectItem:{
+				get () {
+					return this.$store.state.layout.dropDownIndex
+				},
+				set (value) {
+					this.$store.commit('layout/setDropDownIndex', value)
+					this.config.updown = this.dropDownOption[ value ].updown == 0 ? false : true
+					this.config.isnew  = this.dropDownOption[ value ].isnew == 0 ? false : true
+					this.pullOnRefresh()
+				}
 			}
 		},
 		watch:{
-			activeItemChange( newV, oldV ){
-				this.config.updown = this.config.dropDownOption[ newV ].updown == 0 ? false : true;
-				this.config.isnew  = this.config.dropDownOption[ newV ].isnew == 0 ? false : true;
-				this.pullOnRefresh();
-			}
+			
 		}
 	}
 </script>

@@ -1,9 +1,8 @@
 <template>
 	<div>
 		<van-dropdown-menu active-color="#1aad19">
-			<van-dropdown-item v-model="formData.selectItem" :options="config.dropDownOption" />
+			<van-dropdown-item v-model="selectItem" :options="dropDownOption" />
 		</van-dropdown-menu>
-		
 		<vxe-table stripe :height="height" :data="tableData">
         	<vxe-table-column title="序号" field="sn" min-width="10"></vxe-table-column>
         	<vxe-table-column title="门幅" field="width"  min-width="30"></vxe-table-column>
@@ -40,14 +39,11 @@
 						columns : [],
 					}
 				},
-				formData:{
-					selectItem : 0
-				},
 				tableData : []
 			}
 		},
 		methods:{
-			getConfig(){
+			/*getConfig(){
 				let self = this;
 				this.$request.common.getConfig().then(res=>{
 					if( res.errorCode == '00000' ){
@@ -58,12 +54,12 @@
 				}).then(()=>{
 					this.getTableData();
 				});
-			},
+			},*/
 			getTableData(){
-				let self = this;
-				this.$request.select.getBl( this.formData ).then(res=>{
+				this.tableData = []
+				this.$request.select.getBl( { selectItem:this.selectItem || 0 } ).then(res=>{
 					if( res.errorCode == '00000' ){
-						self.tableData = res.result;
+						this.tableData = res.result
 					}
 				});
 			},
@@ -74,7 +70,7 @@
 		created(){
 			this.$store.commit('layout/setTitle','备料')
 			this.$store.commit('layout/setActive','bl')
-			this.getConfig();
+			this.getTableData()
 		},
 		mounted(){
 			this.setElementSize()
@@ -91,17 +87,27 @@
 			
 		},
 		computed:{
-			itemChange(){
-				return this.formData.selectItem;
-			},
+			/*itemChange(){
+				return this.formData.selectItem
+			},*/
 			...mapGetters({
-				height:'layout/height'
+				height:'layout/height',
+				dropDownOption:'layout/dbItem'
 			}),
+			selectItem:{
+				get () {
+					return this.$store.state.layout.dropDownIndex
+				},
+				set (value) {
+					this.$store.commit('layout/setDropDownIndex', value)
+					this.getTableData()
+				}
+			}
 		},
 		watch:{
-			itemChange( newV, oldV ){
-				this.getTableData();
-			}
+			/*itemChange( newV, oldV ){
+				this.getTableData()
+			}*/
 		}
 	}
 </script>

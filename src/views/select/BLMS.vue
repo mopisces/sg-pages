@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<van-dropdown-menu>
-			<van-dropdown-item v-model="formData.index" :options="config.dropDown.indexOption" />
+			<van-dropdown-item v-model="selectItem" :options="dropDownOption" />
 			<van-dropdown-item v-model="formData.active" :options="config.dropDown.activeOption" />
 		</van-dropdown-menu>
 		<vxe-table ref="blms" stripe border :height="height" :data="tableData">
@@ -54,7 +54,7 @@
 		},
 		methods:{
 			getConfig(){
-				let self = this;
+				/*let self = this;
 				this.$request.common.getConfig().then(res=>{
 					if( res.errorCode == '00000' ){
 						res.result.forEach((item,index)=>{
@@ -83,17 +83,62 @@
 					}
 				}).then(()=>{
 					this.getTableData()
-				});
+				});*/
+				if( this.weight == 0 ){
+					this.config.dropDown.activeOption = [
+						{
+							text  : '按长度',
+							value : 0
+						}
+					];
+				}else{
+					this.config.dropDown.activeOption = [
+						{
+							text  : '按长度',
+							value : 0
+						},
+						{
+							text  : '按重量',
+							value : 1
+						}
+					];
+				}
+				this.getTableData()
 			},
 			getTableData(){
 				this.tableData = []
-				this.$refs.blms.clearScroll().then(()=>{
-					this.$request.select.getBlms( this.formData ).then(res=>{
-						if( res.errorCode == '00000' ){
-							this.tableData = res.result
-						}
-					})
+				this.$request.select.getBlms( { index:this.selectItem, active:this.formData.active } ).then(res=>{
+					if( res.errorCode == '00000' ){
+						this.tableData = res.result
+					}
 				})
+			},
+			selectItemChange( selectItem ){
+				this.config.isnew = this.config.dropDown.indexOption[selectItem].isnew == 0 ? false : true
+				if( this.config.isnew ){
+					this.config.dropDown.activeOption = [
+						{
+							text  : '按长度',
+							value : 0
+						},
+						{
+							text  : '按重量',
+							value : 1
+						}
+					];
+				}else{
+					this.config.dropDown.activeOption = [
+						{
+							text  : '按长度',
+							value : 0
+						}
+					];
+				}
+				if( this.formData.active == 0 ){
+					this.getTableData()
+				} else {
+					this.formData.active = 0
+				}
 			},
 			setElementSize(){
 				this.$store.commit('layout/setHeight', window.screen.height - 96 - 50)
@@ -119,18 +164,29 @@
 			
 		},
 		computed:{
-			indexChange(){
+			/*indexChange(){
 				return this.formData.index
-			},
+			},*/
 			activeChange(){
 				return this.formData.active
 			},
 			...mapGetters({
-				height:'layout/height'
+				height:'layout/height',
+				dropDownOption:'layout/dbItem',
+				weight:'layout/weight'
 			}),
+			selectItem:{
+				get () {
+					return this.$store.state.layout.dropDownIndex
+				},
+				set (value) {
+					this.$store.commit('layout/setDropDownIndex', 	value)
+					this.getTableData()
+				}
+			}
 		},
 		watch:{
-			indexChange( newV, oldV ){
+			/*indexChange( newV, oldV ){
 				this.config.isnew = this.config.dropDown.indexOption[newV].isnew == 0 ? false : true;
 				if( this.config.isnew ){
 					this.config.dropDown.activeOption = [
@@ -153,7 +209,7 @@
 				}
 				this.formData.active = 0
 				this.getTableData()
-			},
+			},*/
 			activeChange( newV, oldV ){
 				this.getTableData()
 			}
