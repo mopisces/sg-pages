@@ -30,6 +30,7 @@ let routes = [
 	{
         path : '/login',
         component: login,
+        name:'login',
         meta:{ title: '登录' }
     },
     {
@@ -99,7 +100,9 @@ let router = new VueRouter({
 
 router.beforeResolve(async (to, from, next) => {
     try{
-        if( store.state.layout.dbItem.length == 0 ) await store.dispatch('layout/getSelectConfig')
+        if( to.name != 'login' ){
+            if( store.state.layout.dbItem.length == 0 ) await store.dispatch('layout/getSelectConfig')
+        }
     }catch(err){
         console.log(err)
     }
