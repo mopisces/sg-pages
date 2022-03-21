@@ -30,7 +30,7 @@
 		},
 		mounted(){
 			try{
-				if(getUserInfo().root == 1) this.showAlter = true
+				if(getUserInfo().root == 0) this.showAlter = true
 			}catch(err){
 				this.showAlter = false
 			}

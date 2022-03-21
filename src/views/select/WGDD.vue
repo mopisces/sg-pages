@@ -29,7 +29,7 @@
 							</td>
 						</tr>
 						<tr>
-							<td colspan="3">
+							<td colspan="3" v-if=" root != 2 ">
 								客户名称:<span class="text-color">{{ item.company_name }}</span>
 							</td>
 						</tr>
@@ -74,10 +74,14 @@
 							<td>
 								压型:<span class="text-color">{{ item.pressing_type }}</span>
 							</td>
-							<td>
+							<!-- <td>
 								生产刀数:
 								<span class="text-color" v-if="config.updown">{{ item.prod_qty }}</span>
 								<span class="text-color" v-else>{{ item.good_qty }}</span>
+							</td> -->
+							<td>
+								生产刀数:
+								<span class="text-color">{{ item.prod_qty }}</span>
 							</td>
 							<td>
 								坏品数:<span class="text-color">{{ item.bad_qty }}</span>
@@ -201,7 +205,7 @@
 				this.getConfig( true );
 			},
 			filterClick(){
-				this.getWgdd();
+				this.pullOnRefresh();
 			},
 			getDropDown(){
 				this.config.updown = this.dropDownOption[ this.selectItem ].updown == 0 ? false : true

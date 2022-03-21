@@ -40,7 +40,7 @@
 							</td>
 						</tr>
 						<tr>
-							<td colspan="3">
+							<td colspan="3" v-if=" root != 2 ">
 								客户名称:<span class="text-color">{{ item.company_name }}</span>
 							</td>
 						</tr>
@@ -196,6 +196,7 @@
 				try{
 					let userInfo = getUserInfo()
 					this.root = userInfo.root
+					console.log(this.root)
 				}catch(err){
 					this.root = null
 				}

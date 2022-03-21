@@ -3,7 +3,7 @@ import router from '@/router'
 import { getToken, cleanUserInfo } from '@/utils'
 
 let http = axios.create({
-	timeout:1500,
+	timeout:5000,
 	headers:{
 		'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
 		/*'Authentication': getToken()*/
@@ -82,6 +82,7 @@ let errorHandle = {
 					err.message = `链接出错(${err.response.status})`
 			}
 		} else {
+			console.log(err)
 			err.message = '链接服务器失败!'
 		}
 		vant.Notify({
