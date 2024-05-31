@@ -6,148 +6,148 @@
 		<template v-if="config.updown">
 			<table class="monitor-info">
 				<tr class="monitor-info">
-					<td>切刀数</td>
-					<td>生产刀数</td>
-					<td>剩余刀数</td>
-					<td>不良刀数</td>
+					<td>{{ $t('h.numOfSlitters') }}</td>
+					<td>{{ $t('h.prodSlitters') }}</td>
+					<td>{{ $t('h.remainingSlitters') }}</td>
+					<td>{{ $t('h.badSlitters') }}</td>
 				</tr>
 				<tr class="monitor-info">
-					<td class="top-td" @click="buildChart('切刀数(上刀)','刀数','qds1')">
+					<td class="top-td" @click="buildChart($t('h.numOfSlitters')+'('+$t('h.upperKinfe')+')',$t('h.kinfeNum'),'qds1')">
 						{{ updownInfo.qds1 }}
 					</td>
-					<td class="top-td" @click="buildChart('生产刀数(上刀)','刀数','scds1')">
+					<td class="top-td" @click="buildChart($t('h.prodSlitters')+'('+$t('h.upperKinfe')+')',$t('h.kinfeNum'),'scds1')">
 						{{ updownInfo.scds1 }}
 					</td>
-					<td class="top-td" @click="buildChart('剩余刀数(上刀)','刀数','syds1')">
+					<td class="top-td" @click="buildChart($t('h.remainingSlitters')+'('+$t('h.upperKinfe')+')',$t('h.kinfeNum'),'syds1')">
 						{{ updownInfo.syds1 }}
 					</td>
-					<td class="top-td" @click="buildChart('不良刀数(上刀)','刀数','blds1')">
+					<td class="top-td" @click="buildChart($t('h.badSlitters')+'('+$t('h.upperKinfe')+')',$t('h.kinfeNum'),'blds1')">
 						{{ updownInfo.blds1 }}
 					</td>
 				</tr>
 				<tr class="monitor-info">
-					<td class="top-td" @click="buildChart('切刀数(下刀)','刀数','qds2')">
+					<td class="top-td" @click="buildChart($t('h.numOfSlitters')+'('+$t('h.lowerKinfe')+')',$t('h.kinfeNum'),'qds2')">
 						{{ updownInfo.qds2 }}
 					</td>
-					<td class="top-td" @click="buildChart('生产刀数(上刀)','刀数','scds2')">
+					<td class="top-td" @click="buildChart($t('h.prodSlitters')+'('+$t('h.upperKinfe')+')',$t('h.kinfeNum'),'scds2')">
 						{{ updownInfo.scds2 }}
 					</td>
-					<td class="top-td" @click="buildChart('剩余刀数(下刀)','刀数','syds2')">
+					<td class="top-td" @click="buildChart($t('h.remainingSlitters')+'('+$t('h.lowerKinfe')+')',$t('h.kinfeNum'),'syds2')">
 						{{ updownInfo.syds2 }}
 					</td>
-					<td class="top-td" @click="buildChart('不良刀数(下刀)','刀数','blds2')">
+					<td class="top-td" @click="buildChart($t('h.badSlitters')+'('+$t('h.lowerKinfe')+')',$t('h.kinfeNum'),'blds2')">
 						{{ updownInfo.blds2 }}
 					</td>
 				</tr>
 			</table>
 			<table class="monitor-info">
 				<tr class="monitor-info">
-					<td>坑机</td>
-					<td>糊机</td>
+					<td>{{ $t('h.singleFacer') }}</td>
+					<td>{{ $t('h.glueMachine') }}</td>
 					<td>SF1</td>
 					<td>SF2</td>
 					<td>SF3</td>
 				</tr>
 				<tr class="monitor-info">
-					<td>车速</td>
-					<td @click="buildChart('糊机/车速','','huji_cs')">{{ updownInfo.huji.cs }}</td>
-					<td @click="buildChart('SF1/车速','','SF1_cs')">{{ updownInfo.SF1.cs }}</td>
-					<td @click="buildChart('SF2/车速','','SF2_cs')">{{ updownInfo.SF2.cs }}</td>
-					<td @click="buildChart('SF3/车速','','SF3_cs')">{{ updownInfo.SF3.cs }}</td>
+					<td>{{ $t('h.speed') }}</td>
+					<td @click="buildChart($t('h.glueMachine') +'/' + $t('speed'),'','huji_cs')">{{ updownInfo.huji.cs }}</td>
+					<td @click="buildChart('SF1/' + $t('speed'),'','SF1_cs')">{{ updownInfo.SF1.cs }}</td>
+					<td @click="buildChart('SF2/' + $t('speed'),'','SF2_cs')">{{ updownInfo.SF2.cs }}</td>
+					<td @click="buildChart('SF3/' + $t('speed'),'','SF3_cs')">{{ updownInfo.SF3.cs }}</td>
 				</tr>
 				<tr class="monitor-info">
-					<td>订单</td>
-					<td colspan="2">{{ className }}班</td>
-					<td colspan="2">本笔</td>
+					<td>{{ $t('h.orders') }}</td>
+					<td colspan="2">{{ className }}{{ $t('h.workShift') }}</td>
+					<td colspan="2">{{ $t('h.currentOrd') }}</td>
 				</tr>
 				<tr class="monitor-info">
-					<td>总米数(m)</td>
-					<td colspan="2" @click="buildChart('？班/总米数','米(m)','benban_zms')">
+					<td>{{ $t('h.totalMeters') }}(m)</td>
+					<td colspan="2" @click="buildChart('？'+$t('h.workShift')+'/'+$t('h.totalMeters'),$t('h.meter'),'benban_zms')">
 						{{ updownInfo.benban.zms }}
 					</td>
-					<td colspan="2" @click="buildChart('本笔/总米数','米(m)','benbi_zms')">
+					<td colspan="2" @click="buildChart($t('h.currentOrd')+'/'+$t('h.totalMeters'),$t('h.meter'),'benbi_zms')">
 						{{ updownInfo.benbi.zms }}
 					</td>
 				</tr>
 				<tr class="monitor-info">
-					<td>生产(m)</td>
-					<td colspan="2" @click="buildChart('？班/生产','米(m)','benban_sc')">
+					<td>{{ $t('h.production') }}(m)</td>
+					<td colspan="2" @click="buildChart('？'+$t('h.workShift')+'/'+$t('h.production'),$t('h.meter'),'benban_sc')">
 						{{ updownInfo.benban.sc }}
 					</td>
-					<td colspan="2" @click="buildChart('本笔/生产','米(m)','benbi_sc')">
+					<td colspan="2" @click="buildChart($t('h.currentOrd')+'/'+$t('h.production'),$t('h.meter'),'benbi_sc')">
 						{{ updownInfo.benbi.sc }}
 					</td>
 				</tr>
 				<tr class="monitor-info">
-					<td>剩余(m)</td>
-					<td colspan="2" @click="buildChart('？班/剩余','米(m)','benban_sy')">
+					<td>{{ $t('h.remaining') }}(m)</td>
+					<td colspan="2" @click="buildChart('？'+$t('h.workShift')+'/'+$t('h.remaining'),$t('h.meter'),'benban_sy')">
 						{{ updownInfo.benban.sy }}
 					</td>
-					<td colspan="2" @click="buildChart('本笔/剩余','米(m)','benbi_sy')">
+					<td colspan="2" @click="buildChart($t('h.currentOrd')+'/'+$t('h.remaining'),$t('h.meter'),'benbi_sy')">
 						{{ updownInfo.benbi.sy }}
 					</td>
 				</tr>
 				<tr class="monitor-info">
-					<td>不良(m)</td>
-					<td colspan="2" @click="buildChart('？班/不良','米(m)','benban_bl')">
+					<td>{{ $t('h.bad') }}(m)</td>
+					<td colspan="2" @click="buildChart('？'+$t('h.workShift')+'/'+$t('h.bad'),$t('h.meter'),'benban_bl')">
 						{{ updownInfo.benban.bl }}
 					</td>
-					<td colspan="2" @click="buildChart('本笔/不良','米(m)','benbi_bl')">
+					<td colspan="2" @click="buildChart($t('h.currentOrd')+'/'+$t('h.bad'),$t('h.meter'),'benbi_bl')">
 						{{ updownInfo.benbi.bl }}
 					</td>
 				</tr>
 				<tr class="monitor-info">
-					<td>均速(m/min)</td>
-					<td colspan="2" @click="buildChart('？班/均速','米(m)','benban_js')">
+					<td>{{ $t('h.avgSpeed') }}(m/min)</td>
+					<td colspan="2" @click="buildChart('？'+$t('h.workShift')+'/' + $t('h.avgSpeed'),$t('h.meter'),'benban_js')">
 						{{ updownInfo.benban.js }}
 					</td>
-					<td colspan="2"@click="buildChart('本笔/均速','米(m)','benbi_js')">
+					<td colspan="2"@click="buildChart($t('h.currentOrd')+'/' + $t('h.avgSpeed'),$t('h.meter'),'benbi_js')">
 						{{ updownInfo.benbi.js }}
 					</td>
 				</tr>
 				<tr class="monitor-info">
-					<td>生产平方(㎡)</td>
-					<td colspan="2" @click="buildChart('？班/生产平方','平方米(㎡)','benban_scpf')">
+					<td>{{ $t('h.prodSquare') }}(㎡)</td>
+					<td colspan="2" @click="buildChart('？'+$t('h.workShift')+'/'+$t('h.prodSquare'), $t('h.squareMeter'),'benban_scpf')">
 						{{ updownInfo.benban.scpf }}
 					</td>
-					<td colspan="2" @click="buildChart('本笔/生产平方','平方米(㎡)','benbi_scpf')">
+					<td colspan="2" @click="buildChart($t('h.currentOrd')+'/'+$t('h.prodSquare'),$t('h.squareMeter'),'benbi_scpf')">
 						{{ updownInfo.benbi.scpf }}
 					</td>
 				</tr>
 				<tr class="monitor-info">
-					<td>停车次数</td>
-					<td colspan="2" @click="buildChart('？班/停车次数','次数','benban_tccs')">
+					<td>{{ $t('h.numOfStops') }}</td>
+					<td colspan="2" @click="buildChart('？'+$t('h.workShift')+'/' + $t('h.numOfStops'),$t('h.numOfTimes'),'benban_tccs')">
 						{{ updownInfo.benban.tccs }}
 					</td>
-					<td colspan="2" @click="buildChart('本笔/停车次数','次数','benbi_tccs')">
+					<td colspan="2" @click="buildChart($t('h.currentOrd')+'/' + $t('h.numOfStops'),$t('h.numOfTimes'),'benbi_tccs')">
 						{{ updownInfo.benbi.tccs }}
 					</td>
 				</tr>
 				<tr class="monitor-info">
-					<td>坏纸率(%)</td>
-					<td colspan="2" @click="buildChart('？班/坏纸率','%','benban_hzl')">
+					<td>{{ $t('h.badSheetRate') }}(%)</td>
+					<td colspan="2" @click="buildChart('？'+$t('h.workShift')+'/'+$t('h.badSheetRate'),'%','benban_hzl')">
 						{{ updownInfo.benban.hzl }}
 					</td>
-					<td colspan="2" @click="buildChart('本笔/坏纸率','%','benbi_hzl')">
+					<td colspan="2" @click="buildChart($t('h.currentOrd')+'/'+$t('h.badSheetRate'),'%','benbi_hzl')">
 						{{ updownInfo.benbi.hzl }}
 					</td>
 				</tr>
 				<tr class="monitor-info">
-					<td>修边率(%)</td>
-					<td colspan="2" @click="buildChart('？班/修边率','%','benban_xbl')">
+					<td>{{ $t('h.trimmingRate') }}(%)</td>
+					<td colspan="2" @click="buildChart('？'+$t('h.workShift')+'/' + $t('h.trimmingRate'),'%','benban_xbl')">
 						{{ updownInfo.benban.xbl }}
 					</td>
-					<td colspan="2" @click="buildChart('本笔/修边率','%','benbi_xbl')">
+					<td colspan="2" @click="buildChart($t('h.currentOrd')+'/' + $t('h.trimmingRate'),'%','benbi_xbl')">
 						{{ updownInfo.benbi.xbl }}
 					</td>
 				</tr>
 				<tr class="monitor-info">
-					<td>生产时间</td>
+					<td>{{ $t('h.productionTime') }}</td>
 					<td colspan="2">{{ timeFormat(updownInfo.benban.scsj) }}</td>
 					<td colspan="2">{{ timeFormat(updownInfo.benbi.scsj) }}</td>
 				</tr>
 				<tr class="monitor-info">
-					<td>停车时间</td>
+					<td>{{ $t('h.stopTime') }}</td>
 					<td colspan="2">{{ timeFormat(updownInfo.benban.tcsj) }}</td>
 					<td colspan="2">{{ timeFormat(updownInfo.benbi.tcsj) }}</td>
 				</tr>
@@ -156,171 +156,171 @@
 		<template v-else>
 			<table class="monitor-info">
 				<tr class="monitor-info">
-					<td>切刀数</td>
-					<td>生产刀数</td>
-					<td>剩余刀数</td>
-					<td>不良刀数</td>
+					<td>{{ $t('h.numOfSlitters') }}</td>
+					<td>{{ $t('h.prodSlitters') }}</td>
+					<td>{{ $t('h.remainingSlitters') }}</td>
+					<td>{{ $t('h.badSlitters') }}</td>
 				</tr>
 				<tr class="monitor-info">
-					<td class="top-td" @click="buildChart('切刀数','刀数','qds')">
+					<td class="top-td" @click="buildChart($t('h.numOfSlitters'),$t('h.kinfeNum'),'qds')">
 						{{ normalInfo.qds }}
 					</td>
-					<td class="top-td" @click="buildChart('生产刀数','刀数','scds')">
+					<td class="top-td" @click="buildChart($t('h.prodSlitters'),$t('h.kinfeNum'),'scds')">
 						{{ normalInfo.scds }}
 					</td>
-					<td class="top-td" @click="buildChart('剩余刀数','刀数','syds')">
+					<td class="top-td" @click="buildChart($t('h.remainingSlitters'),$t('h.kinfeNum'),'syds')">
 						{{ normalInfo.syds }}
 					</td>
-					<td class="top-td" @click="buildChart('不良刀数','刀数','blds')">
+					<td class="top-td" @click="buildChart($t('h.badSlitters'),$t('h.kinfeNum'),'blds')">
 						{{ normalInfo.blds }}
 					</td>
 				</tr>
 				<tr v-if="config.isnew" class="monitor-info">
-					<td>剩余(m)</td>
-					<td>生产长(m)</td>
-					<td>切长(mm)</td>
-					<td>车速</td>
+					<td>{{ $t('h.remaining') }}(m)</td>
+					<td>{{ $t('h.prodLen') }}(m)</td>
+					<td>{{ $t('h.cutLen') }}(mm)</td>
+					<td>{{ $t('h.speed') }}</td>
 				</tr>
 				<tr v-if="config.isnew" class="monitor-info">
-					<td class="top-td" @click="buildChart('订单剩余','米(m)','ddsy')">
+					<td class="top-td" @click="buildChart($t('h.remainingOrd'),$t('h.meter'),'ddsy')">
 						{{ normalInfo.ddsy }}
 					</td>
-					<td class="top-td" @click="buildChart('生产长','米(m)','ddc')">
+					<td class="top-td" @click="buildChart($t('h.prodLen'),$t('h.meter'),'ddc')">
 						{{ normalInfo.ddc }}
 					</td>
-					<td class="top-td" @click="buildChart('切长','毫米(mm)','qc')">
+					<td class="top-td" @click="buildChart($t('h.cutLen'),$t('h.mm'),'qc')">
 						{{ normalInfo.qc }}
 					</td>
-					<td class="top-td"  @click="buildChart('车速','','cs')">
+					<td class="top-td"  @click="buildChart($t('h.speed'),'','cs')">
 						{{ normalInfo.cs }}
 					</td>
 				</tr>
 			</table>
 			<table class="monitor-info">
 				<tr class="monitor-info">
-					<td>坑机</td>
-					<td>糊机</td>
+					<td>{{ $t('h.singleFacer') }}</td>
+					<td>{{ $t('h.glueMachine') }}</td>
 					<td>SF1</td>
 					<td>SF2</td>
 					<td>SF3</td>
 				</tr>
 				<tr class="monitor-info">
-					<td>车速</td>
-					<td @click="buildChart('糊机/车速','','huji_cs')">{{ normalInfo.huji.cs }}</td>
-					<td @click="buildChart('SF1/车速','','SF1_cs')">{{ normalInfo.SF1.cs }}</td>
-					<td @click="buildChart('SF2/车速','','SF2_cs')">{{ normalInfo.SF2.cs }}</td>
-					<td @click="buildChart('SF3/车速','','SF3_cs')">{{ normalInfo.SF3.cs }}</td>
+					<td>{{ $t('h.speed') }}</td>
+					<td @click="buildChart($t('h.glueMachine')+'/'+$t('h.speed'),'','huji_cs')">{{ normalInfo.huji.cs }}</td>
+					<td @click="buildChart('SF1/'+$t('h.speed'),'','SF1_cs')">{{ normalInfo.SF1.cs }}</td>
+					<td @click="buildChart('SF2/'+$t('h.speed'),'','SF2_cs')">{{ normalInfo.SF2.cs }}</td>
+					<td @click="buildChart('SF3/'+$t('h.speed'),'','SF3_cs')">{{ normalInfo.SF3.cs }}</td>
 				</tr>
 				<tr v-if="config.isnew" class="monitor-info">
-					<td>剩余</td>
-					<td @click="buildChart('糊机/剩余','','huji_cs')">{{ normalInfo.huji.sy }}</td>
-					<td @click="buildChart('SF1/剩余','','SF1_sy')">{{ normalInfo.SF1.sy }}</td>
-					<td @click="buildChart('SF2/剩余','','SF2_sy')">{{ normalInfo.SF2.sy }}</td>
-					<td @click="buildChart('SF3/剩余','','SF3_sy')">{{ normalInfo.SF3.sy }}</td>
+					<td>{{ $t('h.remaining') }}</td>
+					<td @click="buildChart($t('h.glueMachine')+'/' + $t('h.remaining'),'','huji_cs')">{{ normalInfo.huji.sy }}</td>
+					<td @click="buildChart('SF1/'+$t('h.remaining'),'','SF1_sy')">{{ normalInfo.SF1.sy }}</td>
+					<td @click="buildChart('SF2/'+$t('h.remaining'),'','SF2_sy')">{{ normalInfo.SF2.sy }}</td>
+					<td @click="buildChart('SF3/'+$t('h.remaining'),'','SF3_sy')">{{ normalInfo.SF3.sy }}</td>
 				</tr>
 				<tr v-if="config.isnew" class="monitor-info">
-					<td>累计</td>
-					<td @click="buildChart('糊机/累计','','huji_lj')">{{ normalInfo.huji.lj }}</td>
-					<td @click="buildChart('SF1/累计','','SF1_lj')">{{ normalInfo.SF1.lj }}</td>
-					<td @click="buildChart('SF2/累计','','SF2_lj')">{{ normalInfo.SF2.lj }}</td>
-					<td @click="buildChart('SF3/累计','','SF3_lj')">{{ normalInfo.SF3.lj }}</td>
+					<td>{{ $t('h.accTotal') }}</td>
+					<td @click="buildChart($t('h.glueMachine')+'/' + $t('h.accTotal'),'','huji_lj')">{{ normalInfo.huji.lj }}</td>
+					<td @click="buildChart('SF1/' + $t('h.accTotal'),'','SF1_lj')">{{ normalInfo.SF1.lj }}</td>
+					<td @click="buildChart('SF2/' + $t('h.accTotal'),'','SF2_lj')">{{ normalInfo.SF2.lj }}</td>
+					<td @click="buildChart('SF3/' + $t('h.accTotal'),'','SF3_lj')">{{ normalInfo.SF3.lj }}</td>
 				</tr>
 			<!-- </table>
 			<table> -->
 				<tr class="monitor-info">
-					<td>订单</td>
-					<td colspan="2">{{ className }}班</td>
-					<td colspan="2">本笔</td>
+					<td>{{ $t('h.orders') }}</td>
+					<td colspan="2">{{ className }}{{ $t('h.workShift') }}</td>
+					<td colspan="2">{{ $t('h.currentOrd') }}</td>
 				</tr>
 				<tr class="monitor-info">
-					<td>总米数(m)</td>
-					<td colspan="2" @click="buildChart('？班/总米数','米(m)','benban_zms')">
+					<td>{{ $t('h.totalMeters') }}(m)</td>
+					<td colspan="2" @click="buildChart('？'+$t('h.workShift')+'/'+$t('h.totalMeters'),$t('h.meter'),'benban_zms')">
 						{{ normalInfo.benban.zms }}
 					</td>
-					<td colspan="2" @click="buildChart('本笔/总米数','米(m)','benbi_zms')">
+					<td colspan="2" @click="buildChart($t('h.currentOrd') + '/'+$t('h.totalMeters'),$t('h.meter'),'benbi_zms')">
 						{{ normalInfo.benbi.zms }}
 					</td>
 				</tr>
 				<tr class="monitor-info">
-					<td>生产(m)</td>
-					<td colspan="2" @click="buildChart('？班/生产','米(m)','benban_sc')">
+					<td>{{ $t('h.production') }}(m)</td>
+					<td colspan="2" @click="buildChart('？'+$t('h.workShift')+'/'+$t('h.production'),$t('h.meter'),'benban_sc')">
 						{{ normalInfo.benban.sc }}
 					</td>
-					<td colspan="2" @click="buildChart('本笔/生产','米(m)','benbi_sc')">
+					<td colspan="2" @click="buildChart($t('h.currentOrd') + '/'+$t('h.production'),$t('h.meter'),'benbi_sc')">
 						{{ normalInfo.benbi.sc }}
 					</td>
 				</tr>
 				<tr class="monitor-info">
 
-					<td>剩余(m)</td>
-					<td colspan="2" @click="buildChart('？班/剩余','米(m)','benban_sy')">
+					<td>{{ $t('h.remaining') }}(m)</td>
+					<td colspan="2" @click="buildChart('？'+$t('h.workShift')+'/'+$t('h.remaining'),$t('h.meter'),'benban_sy')">
 						{{ normalInfo.benban.sy }}
 					</td>
-					<td colspan="2" @click="buildChart('本笔/剩余','米(m)','benbi_sy')">
+					<td colspan="2" @click="buildChart($t('h.currentOrd') + '/'+$t('h.remaining'),$t('h.meter'),'benbi_sy')">
 						{{ normalInfo.benbi.sy }}
 					</td>
 				</tr>
 				<tr class="monitor-info">
-					<td>不良(m)</td>
-					<td colspan="2" @click="buildChart('？班/不良','米(m)','benban_bl')">
+					<td>{{ $t('h.bad') }}(m)</td>
+					<td colspan="2" @click="buildChart('？'+$t('h.workShift')+'/'+$t('h.bad'),$t('h.meter'),'benban_bl')">
 						{{ normalInfo.benban.bl }}
 					</td>
-					<td colspan="2" @click="buildChart('本笔/不良','米(m)','benbi_bl')">
+					<td colspan="2" @click="buildChart($t('h.currentOrd') + '/'+$t('h.bad'),$t('h.meter'),'benbi_bl')">
 						{{ normalInfo.benbi.bl }}
 					</td>
 				</tr>
 				<tr class="monitor-info">
-					<td>生产平方(㎡)</td>
-					<td colspan="2" @click="buildChart('？班/生产平方','平方米(㎡)','benban_scpf')">
+					<td>{{ $t('h.prodSquare') }}(㎡)</td>
+					<td colspan="2" @click="buildChart('？'+$t('h.workShift')+'/'+$t('h.prodSquare'),$t('h.squareMeter'),'benban_scpf')">
 						{{ normalInfo.benban.scpf }}
 					</td>
-					<td colspan="2" @click="buildChart('本笔/生产平方','平方米(㎡)','benbi_scpf')">
+					<td colspan="2" @click="buildChart($t('h.currentOrd') + '/'+$t('h.prodSquare'),$t('h.squareMeter'),'benbi_scpf')">
 						{{ normalInfo.benbi.scpf }}
 					</td>
 				</tr>
 				<tr class="monitor-info">
-					<td>坏纸率(%)</td>
-					<td colspan="2" @click="buildChart('？班/坏纸率','%','benban_hzl')">
+					<td>{{ $t('h.badSheetRate') }}(%)</td>
+					<td colspan="2" @click="buildChart('？'+$t('h.workShift')+'/'+$t('h.badSheetRate'),'%','benban_hzl')">
 						{{ normalInfo.benban.hzl }}
 					</td>
-					<td colspan="2" @click="buildChart('本笔/坏纸率','%','benbi_hzl')">
+					<td colspan="2" @click="buildChart($t('h.currentOrd')+'/'+$t('h.badSheetRate'),'%','benbi_hzl')">
 						{{ normalInfo.benbi.hzl }}
 					</td>
 				</tr>
 				<tr class="monitor-info">
-					<td>修边率(%)</td>
-					<td colspan="2" @click="buildChart('？班/修边率','%','benban_xbl')">
+					<td>{{ $t('h.trimmingRate') }}(%)</td>
+					<td colspan="2" @click="buildChart('？'+$t('h.workShift')+'/' + $t('h.trimmingRate'),'%','benban_xbl')">
 						{{ normalInfo.benban.xbl }}
 					</td>
-					<td colspan="2" @click="buildChart('本笔/修边率','%','benbi_xbl')">
+					<td colspan="2" @click="buildChart($t('h.currentOrd')+'/' + $t('h.trimmingRate'),'%','benbi_xbl')">
 						{{ normalInfo.benbi.xbl }}
 					</td>
 				</tr>
 				<tr class="monitor-info">
-					<td>均速(m/min)</td>
-					<td colspan="2" @click="buildChart('？班/均速','米/分(m/min)','benban_js')">
+					<td>{{ $t('h.avgSpeed') }}(m/min)</td>
+					<td colspan="2" @click="buildChart('？'+$t('h.workShift')+'/'+$t('h.avgSpeed'),$t('h.meter')+'/'+$t('h.minute'),'benban_js')">
 						{{ normalInfo.benban.js }}
 					</td>
-					<td colspan="2" @click="buildChart('本笔/均速','米/分(m/min)','benbi_js')">
+					<td colspan="2" @click="buildChart($t('h.currentOrd')+'/'+$t('h.avgSpeed'),$t('h.meter')+'/'+$t('h.minute'),'benbi_js')">
 						{{ normalInfo.benbi.js }}
 					</td>
 				</tr>
 				<tr class="monitor-info">
-					<td>停车次数</td>
-					<td colspan="2" @click="buildChart('？班/停车次数','次数','benban_tccs')">
+					<td>{{ $t('h.numOfStops') }}</td>
+					<td colspan="2" @click="buildChart('？'+$t('h.workShift')+'/'+$t('h.numOfStops'),$t('h.numOfTimes'),'benban_tccs')">
 						{{ normalInfo.benban.tccs }}
 					</td>
-					<td colspan="2" @click="buildChart('本笔/停车次数','次数','benbi_tccs')">
+					<td colspan="2" @click="buildChart($t('h.currentOrd')+'/'+$t('h.numOfStops'),$t('h.numOfTimes'),'benbi_tccs')">
 						{{ normalInfo.benbi.tccs }}
 					</td>
 				</tr>
 				<tr class="monitor-info">
-					<td>生产时间</td>
+					<td>{{ $t('h.productionTime') }}</td>
 					<td colspan="2">{{ timeFormat(normalInfo.benban.scsj) }}</td>
 					<td colspan="2">{{ timeFormat(normalInfo.benbi.scsj) }}</td>
 				</tr>
 				<tr class="monitor-info">
-					<td>停车时间</td>
+					<td>{{ $t('h.stopTime') }}</td>
 					<td colspan="2">{{ timeFormat(normalInfo.benban.tcsj) }}</td>
 					<td colspan="2">{{ timeFormat(normalInfo.benbi.tcsj) }}</td>
 				</tr>
@@ -493,7 +493,6 @@
 				this.config.updown = this.dropDownOption[ this.selectItem ].updown
 				this.config.isnew = this.dropDownOption[ this.selectItem ].isnew
 				this.getSocket(this.dropDownOption[ this.selectItem ].socketUrl,this.selectItem)
-				console.log()
 			},
 			getSocket( socketUrl, index ){
 				this.clearData()
@@ -503,15 +502,15 @@
 				});
 
 				this.socket.on('connect',()=>{
-					this.config.notice.text = '链接成功！';
+					this.config.notice.text = this.$i18n.t('h.socketConn');
 				});
 				this.socket.on('AnalyUdpData' + index, (data)=>{
 					if( data == 10060 ){
-						this.config.notice.text = '后台udp广播暂未开启';
+						this.config.notice.text = this.$i18n.t('h.udpErr');
 					}else{
-						this.config.notice.text = '监控开启成功';
+						this.config.notice.text = this.$i18n.t('h.monitorSuccess');
 						if( !JSON.parse(data).data || JSON.parse(data).ret == 0){
-							this.config.notice.text = '数据不完整';
+							this.config.notice.text = this.$i18n.t('h.dataLenErr');
 						}
 						let udpData = JSON.parse(data).data
 						this.className = udpData.class
@@ -539,16 +538,15 @@
 					}
 				});
 				this.socket.on('connect_error',(error)=>{
-					this.config.notice.text = '链接失败,后台服务暂未开启！'
+					this.config.notice.text = this.$i18n.t('h.socketErr')
 				});
 				this.socket.on('connect_timeout',(timeout)=>{
-					this.config.notice.text = '超时链接,后台服务暂未开启！'
+					this.config.notice.text = this.$i18n.t('h.socketTimeOut')
 				});
 				this.socket.on('error',(error)=>{
-					this.config.notice.text = '链接错误'
+					this.config.notice.text = this.$i18n.t('h.connErr')
 				});
 				this.socket.on('disconnect',(error)=>{
-					console.log('disconnect')
 					this.config.notice.text = 'disconnect'
 				});
 			},
@@ -630,13 +628,26 @@
 			clearData(){
 				this.updownInfo = this.$options.data().updownInfo
 				this.normalInfo = this.$options.data().normalInfo
+			},
+			test(){
+				let socket = io('127.0.0.1:40000',{
+					timeout:3000
+				});
+
+				socket.on('SCLX', (data)=>{
+					console.log(data)
+				});
+
+				socket.on('XLK', (data)=>{
+					console.log(data)
+				});
 			}
 		},
 		created(){
-			this.$store.commit('layout/setTitle','生管监控')
+			this.$store.commit('layout/setTitle', this.$i18n.t('h.monitoring'))
 			this.$store.commit('layout/setActive','monitor')
 			this.getConfig()
-
+			this.test()
 		},
 		mounted(){
 			Highcharts.setOptions({

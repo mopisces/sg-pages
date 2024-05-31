@@ -5,17 +5,17 @@
 			</statis-filter-header>
 			<div class="van-row">
 				<div class="van-col van-col--12">
-					<van-button plain hairline type="info" style="width:100%" @click="onRefresh()">刷新</van-button>
+					<van-button plain hairline type="info" style="width:100%" @click="onRefresh()">{{ $t('h.refresh') }}</van-button>
 				</div>
 				<div class="van-col van-col--12">
-					<van-button plain hairline type="info" style="width:100%"  @click="config.popup.filterShow = true">筛选</van-button>
+					<van-button plain hairline type="info" style="width:100%"  @click="config.popup.filterShow = true">{{ $t('h.filter') }}</van-button>
 				</div>
 			</div>
 		</van-sticky>
 		<popup-filter :filterShow.sync="config.popup.filterShow" @resetClick="resetClick" @filterClick="filterClick">
 			<div slot="filter-field-1">
-				<new-time-picker v-if="config.popup.timePicker.isFinishLoad" :dateTime.sync="filterForm.beginDate" :minDate="pageConfig.minDate" :maxDate="pageConfig.maxDate" label="开始日期"></new-time-picker>
-				<new-time-picker v-if="config.popup.timePicker.isFinishLoad" :dateTime.sync="filterForm.endDate" :minDate="pageConfig.minDate" :maxDate="pageConfig.maxDate" label="结束日期"></new-time-picker>
+				<new-time-picker v-if="config.popup.timePicker.isFinishLoad" :dateTime.sync="filterForm.beginDate" :minDate="pageConfig.minDate" :maxDate="pageConfig.maxDate" :label="$t('h.startDate')"></new-time-picker>
+				<new-time-picker v-if="config.popup.timePicker.isFinishLoad" :dateTime.sync="filterForm.endDate" :minDate="pageConfig.minDate" :maxDate="pageConfig.maxDate" :label="$t('h.endDate')"></new-time-picker>
 			</div>
 		</popup-filter>
 		<div id="highcharts-container" :style="{width:config.chart.width + 'px',height:config.chart.height + 'px',}">
@@ -100,27 +100,27 @@
 						height:null
 					},
 					popup:{
-						chartSelect:{
-							show:false,
+						chartSelect: {
+							show: false,
 						},
-						filterShow:false,
-						timePicker:{
-							isFinishLoad:false
+						filterShow: false,
+						timePicker: {
+							isFinishLoad: false
 						},
 					},
 				},
 				lineType:[],
 				pageConfig:{
-					maxDate : null,
-					minDate : null,
+					maxDate: null,
+					minDate: null,
 				},
 				filterForm:{
-					beginDate       : null,
-					endDate         : null,
-					timeType        : 1,
-					lineType        : null,
-					classType       : 'ALL',
-					chartProperties : 'sumArea',
+					beginDate: null,
+					endDate: null,
+					timeType: 1,
+					lineType: null,
+					classType: 'ALL',
+					chartProperties: 'sumArea',
 				}
 			}
 		},
@@ -164,7 +164,7 @@
 			getStatisData(){
 				console.log(this.filterForm.lineType)
 				if( this.filterForm.lineType == null ){
-					this.$toast.fail('暂无生产线支持该功能')
+					this.$toast.fail(this.$i18n.t('h.lineNotSupport'))
 					return false
 				}
 				this.config.chart.show = false;
@@ -182,10 +182,10 @@
 			getReBuildDate( date ){
 				switch( this.filterForm.timeType ){
 					case 2:
-						return '第' + date + '周';
+						return date + this.$i18n.t('h.week');
 						break;
 					case 3:
-						return date + '月';
+						return date + this.$i18n.t('h.month');
 						break;
 					default:
 						return date;
@@ -213,25 +213,25 @@
 							/*this.config.chart.options.xAxis.categories.push(this.getReBuildDate(item.statis_date))*/
 							categories.push(this.getReBuildDate(item.statis_date))
 						});
-						series.push({name:'良品平方',data:good_sqm})
-						series.push({name:'总废品平方',data:total_waste_sqm})
-						title = '单位:平方米'
+						series.push({name: this.$i18n.t('h.goodProdSquare'),data:good_sqm})
+						series.push({name: this.$i18n.t('h.cutWasteSquare'),data:total_waste_sqm})
+						title = this.$i18n.t('h.squareMeter')
 						break;
 					case 'sumLen':
 						res.forEach((item,idx)=>{
 							total_len.push(Number(item.total_len));
 							categories.push(this.getReBuildDate(item.statis_date))
 						})
-						series.push({name:'总米数',data:total_len})
-						title = '单位:米'
+						series.push({name: this.$i18n.t('h.totalMeters'),data:total_len})
+						title = this.$i18n.t('h.meter')
 						break;
 					case 'avgSpeed':
 						res.forEach((item,idx)=>{
 							avg_speed.push(Number(item.avg_speed))
 							categories.push(this.getReBuildDate(item.statis_date))
 						});
-						series.push({name:'平均车速',data:avg_speed})
-						title = '平均车速'
+						series.push({name: this.$i18n.t('h.avgSpeed'),data:avg_speed})
+						title = this.$i18n.t('h.avgSpeed')
 						break;
 					case 'sumLoss':
 						res.forEach((item,idx)=>{
@@ -242,21 +242,24 @@
 							good_sqm.push(Number(item.good_sqm))
 							categories.push(this.getReBuildDate(item.statis_date))
 						});
-						series.push({name:'坏品平方',data:bad_sqm})
-						series.push({name:'修边平方',data:trim_sqm})
-						series.push({name:'切废平方',data:cutting_waste_sqm})
-						series.push({name:'换单切废平方',data:shift_cutting_waste_sqm})
-						title = '平均车速'
+						series.push({name: this.$i18n.t('h.badProdSquare'),data:bad_sqm})
+						series.push({name: this.$i18n.t('h.trimmingSquare'),data:trim_sqm})
+						series.push({name: this.$i18n.t('h.cutWasteSquare'),data:cutting_waste_sqm})
+						series.push({
+							name: this.$i18n.t('h.orderChange') + this.$i18n.t('h.cutWasteSquare'),
+							data: shift_cutting_waste_sqm
+						})
+						title = this.$i18n.t('h.sumLoss')
 						break;
 					case 'sumStops':
 						res.forEach((item,idx)=>{
 							stops.push(Number(item.stops))
 							categories.push(this.getReBuildDate(item.statis_date))
 						});
-						series.push({name:'停次',data:stops})
-						title = '单位:次'
+						series.push({name: this.$i18n.t('h.numOfStops'),data:stops})
+						title = this.$i18n.t('h.numOfTimes')
 					default :
-						title = '单位:平方米'
+						title = this.$i18n.t('h.squareMeter')
 				}
 
 				let extremes = 5
@@ -287,7 +290,7 @@
 			}
 		},
 		created(){
-			this.$store.commit('layout/setTitle','生产进度')
+			this.$store.commit('layout/setTitle', this.$i18n.t('h.productionReport'))
 			this.$store.commit('layout/setActive','menu')
 		},
 		mounted(){

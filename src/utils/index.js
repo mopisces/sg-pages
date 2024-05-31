@@ -1,4 +1,4 @@
-var itemName = 'karry-sg-userInfo'
+var itemName = 'karry-sg-user-login'
 
 export function getToken()
 {

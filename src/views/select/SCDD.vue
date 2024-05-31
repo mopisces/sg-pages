@@ -1,121 +1,172 @@
 <template>
-	<div>
+	<div class="page-color">
 		<van-sticky :offset-top="46">
 			<van-dropdown-menu>
 				<van-dropdown-item v-model="selectItem" :options="dropDownOption" />
-				<van-dropdown-item title="筛选" ref="filter">
-					<van-field label="序号" v-model="formData.sn" placeholder="精确查询" input-align="center"/>
-					<van-field label="订单号" v-model="formData.orderNumber" placeholder="精确查询" input-align="center"/>
-					<van-field label="客户名称" v-model="formData.companyName" placeholder="精确查询" input-align="center" v-if=" root != 2 "/>
-					<van-field label="纸质" v-model="formData.paperCode" placeholder="精确查询" input-align="center"/>
-					<van-field label="坑型" v-model="formData.fluteType" placeholder="精确查询" input-align="center"/>
-					<van-field label="门幅" v-model="formData.width" placeholder="精确查询" input-align="center"/>
+				<van-dropdown-item :title="$t('h.filterCondition')" ref="filter">
+					<van-field :label="$t('h.num')" v-model="formData.sn" :placeholder="$t('h.accurateQuery')" input-align="center"/>
+					<van-field :label="$t('h.ordNum')" v-model="formData.orderNumber" :placeholder="$t('h.accurateQuery')" input-align="center"/>
+					<van-field :label="$t('h.custName')" v-model="formData.companyName" :placeholder="$t('h.accurateQuery')" input-align="center" v-if=" root != 2 "/>
+					<van-field :label="$t('h.paper')" v-model="formData.paperCode" :placeholder="$t('h.accurateQuery')"input-align="center"/>
+					<van-field :label="$t('h.facerType')" v-model="formData.fluteType" :placeholder="$t('h.accurateQuery')" input-align="center"/>
+					<van-field :label="$t('h.width')" v-model="formData.width" :placeholder="$t('h.accurateQuery')" input-align="center"/>
 					<div style="padding: 5px 16px;">
 						<van-row gutter="20" type="flex" justify="center">
 							<van-col span="10">
-								<van-button type="danger" block round @click="resetClick">重置</van-button>
+								<van-button type="danger" block round @click="resetClick">{{ $t('reset') }}</van-button>
 							</van-col>
 							<van-col span="10">
-								<van-button type="primary" block round @click="filterClick">筛选</van-button>
+								<van-button type="primary" block round @click="filterClick">{{ $t('filter') }}</van-button>
 							</van-col>
 						</van-row>
 					</div>
 				</van-dropdown-item>
 			</van-dropdown-menu>
 		</van-sticky>
-		<van-pull-refresh v-model="config.list.pullRefresh.reloading" @refresh="pullOnRefresh">
-			<van-list v-model="config.list.pushLoading.loading"  :immediate-check="false" :finished="config.list.pushLoading.finished"  finished-text="没有更多了" @load="onLoad" :offset="100" >
-				<div :class="'card-detail van-clearfix ' + (index % 2 ? 'bg-color-odd':'bg-color-even')" v-for="(item,index) in listInfo" :key="index">
-					<div  v-show="config.updown">
-						<div class="oblique-sign-up" v-if="item.tag === '1'">上刀</div>
-				        <div class="oblique-sign-down" v-if="item.tag === '-1'">下刀</div>
+		<van-pull-refresh 
+			v-model="config.list.pullRefresh.reloading" 
+			@refresh="pullOnRefresh"
+		>
+			<van-list 
+				v-model="config.list.pushLoading.loading"  
+				:immediate-check="false" 
+				:finished="config.list.pushLoading.finished"  
+				:finished-text="$t('h.finishedText')" 
+				:offset="100" 
+				@load="onLoad"
+			>
+				<card 
+					:title="item.order_number" 
+					:extra="$t('h.num')+':'+item.sn"
+					:subTitle=" root != 2 ? item.company_name:''"
+					:is-shadow="true"
+					v-for="(item,index) in listInfo" 
+					:key="index"
+					@click="cardClick(item)"
+				>
+					<div class="card-body-container">
+						<div v-show="config.updown" class="card-body-item card-body-item-100">
+							<span>
+								{{ $t('h.slittersInfo') }}:
+								<span v-if="item.tag === '1'" class="blue-color">{{ $t('h.upperKinfe') }}</span>
+								<span v-if="item.tag === '-1'" class="red-color">{{ $t('h.lowerKinfe') }}</span>
+							</span>
+						</div>
+						<div class="card-body-item card-body-item-33">
+							<span>
+								{{ $t('h.quantity') }}:
+								<span class="green-color">{{ item.quantity }}</span>
+							</span>
+						</div>
+						<div class="card-body-item card-body-item-33">
+							<span>
+								{{ $t('h.width') }}:
+								<span class="green-color">{{ item.width }}</span>
+							</span>
+						</div>
+						<div class="card-body-item card-body-item-33">
+							<span>
+								{{ $t('h.facerType') }}:
+								<span class="green-color">{{ item.flute_type }}</span>
+							</span>
+						</div>
+						<div class="card-body-item card-body-item-100">
+							<span>
+								{{ $t('h.sizeInfo') }}:
+								<span class="green-color">{{ item.paper_len }}×{{ item.paper_w }}</span>
+								<span 
+									v-if=" config.isnew " 
+									class="green-color"
+								>
+									{{ item.paper_code }}
+								</span>
+								<span v-else class="green-color">{{ item.paper }}</span>
+							</span>
+						</div>
+						<div class="card-body-item card-body-item-33">
+							<span>
+								{{ $t('h.numOfSlitters') }}:
+								<span class="green-color">{{ item.cutting_qty }}</span>
+							</span>
+						</div>
+						<div class="card-body-item card-body-item-33">
+							<span>
+								{{ $t('h.totalLen') }}:
+								<span class="green-color">{{ item.total_len }}{{ $t('h.meter') }}</span>
+							</span>
+						</div>
+						<div class="card-body-item card-body-item-33">
+							<span>
+								{{ $t('h.crossSection') }}1:
+								<span v-if="config.isnew" class="gren-color">{{ item.slitting }}</span>
+								<span v-else class="green-color" v-else>{{ item.slitting1 }}</span>
+							</span>
+						</div>
+						<div class="card-body-item card-body-item-33">
+							<span>
+								{{ $t('h.bundleQty') }}:
+								<span 
+									v-if="config.isnew" 
+									class="green-color"
+								>
+									{{ item.bundling_qty }}
+								</span>
+								<span v-else class="green-color" v-else>{{ item.bundle_qty }}</span>
+							</span>
+						</div>
+						<div class="card-body-item card-body-item-67">
+							<span>
+								{{ $t('h.scoringType') }}:
+								<span class="green-color">{{ item.pressing_type }}</span>
+							</span>
+						</div>
+						<div class="card-body-item card-body-item-100">
+							<span>
+								{{ $t('h.scoringData') }}1:
+								<span 
+									v-if=" config.isnew " 
+									class="green-color"
+								>
+									{{ item.slitting_data }}
+								</span>
+								<span v-else class="green-color">{{ item.slitting_data1 }}</span>
+							</span>
+						</div>
+						<div class="card-body-item card-body-item-100">
+							<span>
+								{{ $t('h.expCompletion') }}:
+								<span class="green-color">{{ item.pre_finishtime }}</span>
+							</span>
+						</div>
+						<div class="card-body-item card-body-item-100">
+							<span>
+								{{ $t('h.remark') }}:
+								<span class="green-color">{{ item.remark }}</span>
+							</span>
+						</div>
 					</div>
-					<table class="card-info">
-						<tr>
-							<td>
-								序号:<span class="text-color">{{ item.order_number }}</span>
-							</td>
-							<td colspan="2">
-								订单号:<span class="text-color">{{ item.order_number }}</span>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="3" v-if=" root != 2 ">
-								客户名称:<span class="text-color">{{ item.company_name }}</span>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								订单数:<span class="text-color">{{ item.quantity }}</span>
-							</td>
-							<td>
-								门幅:<span class="text-color">{{ item.width }}</span>
-							</td>
-							<td>
-								纸质:
-								<span class="text-color" v-if=" config.isnew ">{{ item.paper_code }}</span>
-								<span class="text-color" v-else>{{ item.paper }}</span>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								坑型:<span class="text-color">{{ item.flute_type }}</span>
-							</td>
-							<td>
-								纸宽:<span class="text-color">{{ item.paper_w }}</span>
-							</td>
-							<td>
-								纸长:<span class="text-color">{{ item.paper_len }}</span>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								切刀数:<span class="text-color">{{ item.cutting_qty }}</span>
-							</td>
-							<td>
-								总长:<span class="text-color">{{ item.total_len }}</span>
-							</td>
-							<td>
-								剖1:
-								<span class="text-color" v-if="config.isnew">{{ item.slitting }}</span>
-								<span class="text-color" v-else>{{ item.slitting1 }}</span>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								压型:<span class="text-color">{{ item.pressing_type }}</span>
-							</td>
-							<td>
-								捆数:
-								<span class="text-color" v-if="config.isnew">{{ item.bundling_qty }}</span>
-								<span class="text-color" v-else>{{ item.bundle_qty }}</span>
-							</td>
-							<td>
-								修边:<span class="text-color">{{ item.trimming }}</span>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="3">
-								压线资料1:
-								<span class="text-color" v-if=" config.isnew ">{{ item.slitting_data }}</span>
-								<span class="text-color" v-else>{{ item.slitting_data1 }}</span>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="3">
-								预计完成时间:<span class="text-color">{{ item.pre_finishtime }}</span>
-							</td>
-						</tr>
-					</table>
-				</div>
+				</card>
 			</van-list>
 		</van-pull-refresh>
+		<van-dialog 
+			v-model="config.dialog.show" 
+			:title="config.dialog.title" 
+			:message="config.dialog.message" 
+			:confirmButtonText="$t('h.confirm')"
+			:show-cancel-button="false"
+		>
+		</van-dialog>
 	</div>
 </template>
 <script>
 	import { getUserInfo } from '@/utils'
 	import { mapGetters } from 'vuex'
+
+	import Card from '@/components/Card.vue'
 	export default {
+		components: {
+			Card
+		},
 		data(){
 			return {
 				config : {
@@ -126,11 +177,16 @@
 						pushLoading:{
 							finished : false,
 							loading  : false
-						}
+						},
 					},
 					dropDownOption:[],
 					updown : false,
-					isnew  : false
+					isnew  : false,
+					dialog:{
+						show:false,
+						message:'',
+						title:'',
+					}
 				},
 				formData:{
 					sn          : '',
@@ -142,7 +198,8 @@
 					curPage     : 1
 				},
 				listInfo : [],
-				root:null
+				root:null,
+				width:window.innerWidth
 			}
 		},
 		methods:{
@@ -191,7 +248,7 @@
 				this.getScdd()
 			},
 			init(){
-				this.$store.commit('layout/setTitle','生产订单')
+				this.$store.commit('layout/setTitle', this.$i18n.t('h.prodOrd'))
 				this.$store.commit('layout/setActive','scdd')
 				try{
 					let userInfo = getUserInfo()
@@ -200,6 +257,11 @@
 				}catch(err){
 					this.root = null
 				}
+			},
+			cardClick(item){
+				this.config.dialog.title =  this.$i18n.t('h.ordNum') + ':' + item.order_number
+				this.config.dialog.message = this.$i18n.t('h.remark') + ':' + item.remark;
+				this.config.dialog.show = true;
 			}
 		},
 		created(){
@@ -234,5 +296,5 @@
 	}
 </script>
 <style type="text/css">
-	@import '~@/assets/style/card.css'
+	@import '~@/assets/style/card.css';
 </style>

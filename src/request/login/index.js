@@ -7,8 +7,9 @@ const login = {
 	login:async ( data )=>{
 		if( !store.state.domain.sg ) await getDomain()
 		let postData = {
-			user_name : data.userName,
-			user_pass : data.userPass
+			user_name: data.userName,
+			user_pass: data.userPass,
+			langs: data.langs
 		}
 		let fullUrl = store.state.domain.sg + '/login'
 		return new Promise((resolve,reject)=>{

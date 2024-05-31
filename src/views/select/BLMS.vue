@@ -5,13 +5,13 @@
 			<van-dropdown-item v-model="formData.active" :options="config.dropDown.activeOption" />
 		</van-dropdown-menu>
 		<vxe-table ref="blms" stripe border :height="height" :data="tableData">
-			<vxe-table-column title="糊机备纸" field="糊机备纸" min-width="130"></vxe-table-column>
-			<vxe-table-column title="SF1芯纸" field="SF1芯纸" min-width="130"></vxe-table-column>
-			<vxe-table-column title="SF1面纸" field="SF1面纸" min-width="130"></vxe-table-column>
-			<vxe-table-column title="SF2芯纸" field="SF2芯纸" min-width="130"></vxe-table-column>
-			<vxe-table-column title="SF2面纸" field="SF2面纸" min-width="130"></vxe-table-column>
-			<vxe-table-column title="SF3芯纸" field="SF3芯纸" min-width="130"></vxe-table-column>
-			<vxe-table-column title="SF3面纸" field="SF3面纸" min-width="130"></vxe-table-column>
+			<vxe-table-column :title="$t('h.glueMachine')" field="糊机备纸" min-width="130"></vxe-table-column>
+			<vxe-table-column :title="'SF1'+$t('h.flutingPaper')" field="SF1芯纸" min-width="130"></vxe-table-column>
+			<vxe-table-column :title="'SF1'+$t('h.liningPaper')" field="SF1面纸" min-width="130"></vxe-table-column>
+			<vxe-table-column :title="'SF2'+$t('h.flutingPaper')" field="SF2芯纸" min-width="130"></vxe-table-column>
+			<vxe-table-column :title="'SF2'+$t('h.liningPaper')" field="SF2面纸" min-width="130"></vxe-table-column>
+			<vxe-table-column :title="'SF3'+$t('h.flutingPaper')" field="SF3芯纸" min-width="130"></vxe-table-column>
+			<vxe-table-column :title="'SF3'+$t('h.liningPaper')" field="SF3面纸" min-width="130"></vxe-table-column>
 		</vxe-table>
 	</div>
 </template>
@@ -27,17 +27,8 @@
 			return {
 				config:{
 					dropDown:{
-						indexOption  : [],
-						activeOption : [
-							{
-								text  : '按长度',
-								value : 0
-							},
-							{
-								text  : '按重量',
-								value : 1
-							}
-						]
+						indexOption: [],
+						activeOption: []
 					},
 					table:{
 						columns:[],
@@ -54,52 +45,22 @@
 		},
 		methods:{
 			getConfig(){
-				/*let self = this;
-				this.$request.common.getConfig().then(res=>{
-					if( res.errorCode == '00000' ){
-						res.result.forEach((item,index)=>{
-							self.config.dropDown.indexOption.push({text:item.DB_FLAG,value:index,isnew:item.isnew});
-						});
-						self.config.isnew = self.config.dropDown.indexOption[0].isnew == 0 ? false : true;
-						if( res.weight == 0 ){
-							self.config.dropDown.activeOption = [
-								{
-									text  : '按长度',
-									value : 0
-								}
-							];
-						}else{
-							self.config.dropDown.activeOption = [
-								{
-									text  : '按长度',
-									value : 0
-								},
-								{
-									text  : '按重量',
-									value : 1
-								}
-							];
-						}
-					}
-				}).then(()=>{
-					this.getTableData()
-				});*/
 				if( this.weight == 0 ){
 					this.config.dropDown.activeOption = [
 						{
-							text  : '按长度',
-							value : 0
+							text: this.$i18n.t('h.sumLen'),
+							value: 0
 						}
 					];
 				}else{
 					this.config.dropDown.activeOption = [
 						{
-							text  : '按长度',
-							value : 0
+							text: this.$i18n.t('h.sumLen'),
+							value: 0
 						},
 						{
-							text  : '按重量',
-							value : 1
+							text: this.$i18n.t('h.weight'),
+							value: 1
 						}
 					];
 				}
@@ -113,39 +74,12 @@
 					}
 				})
 			},
-			selectItemChange( selectItem ){
-				this.config.isnew = this.config.dropDown.indexOption[selectItem].isnew == 0 ? false : true
-				if( this.config.isnew ){
-					this.config.dropDown.activeOption = [
-						{
-							text  : '按长度',
-							value : 0
-						},
-						{
-							text  : '按重量',
-							value : 1
-						}
-					];
-				}else{
-					this.config.dropDown.activeOption = [
-						{
-							text  : '按长度',
-							value : 0
-						}
-					];
-				}
-				if( this.formData.active == 0 ){
-					this.getTableData()
-				} else {
-					this.formData.active = 0
-				}
-			},
 			setElementSize(){
 				this.$store.commit('layout/setHeight', window.screen.height - 96 - 50)
 			}
 		},
 		created(){
-			this.$store.commit('layout/setTitle','备料查看')
+			this.$store.commit('layout/setTitle', this.$i18n.t('h.mpm'))
 			this.$store.commit('layout/setActive','blms')
 			this.getConfig()
 		},

@@ -1,10 +1,28 @@
 <template>
 	<div>
-		<van-field clickable placeholder="请选择日期" input-align="center" :label="label" @click="show = true" v-model="dateTime" readonly>
+		<van-field 
+			clickable 
+			:placeholder="$t('h.selectDate')" 
+			input-align="center" 
+			:label="label" 
+			@click="show = true" 
+			v-model="dateTime" 
+			readonly
+		>
 			<van-icon slot="right-icon" name="arrow"/>
 		</van-field>
 		<van-popup v-model="show" position="bottom" @click-overlay="clickOverlay" :close-on-click-overlay="false" get-container="body">
-			<van-datetime-picker v-model="pickerTime" :min-date="min" :max-date="max" type="date" show-toolbar @cancel="onCancel" @confirm="onConfirm">
+			<van-datetime-picker 
+				v-model="pickerTime" 
+				:min-date="min" 
+				:max-date="max" 
+				type="date" 
+				show-toolbar 
+				:confirm-button-text="$t('confirm')"
+				:cancel-button-text="$t('cancel')"
+				@cancel="onCancel" 
+				@confirm="onConfirm"
+			>
 			</van-datetime-picker>
 		</van-popup>
 	</div>

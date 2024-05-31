@@ -3,7 +3,7 @@
 		<div class="nofound-image">
 			<van-image :src="logo" width="80%" height="60%"/>
 		</div>
-		<div class="nofound-title">404 很抱歉，您查看的页面找不到了！</div>
+		<div class="nofound-title">{{ $t('h.err404') }}</div>
 	</div>
 </template>
 <script>

@@ -3,30 +3,30 @@
 		<van-notice-bar color="#1989fa" background="#ecf9ff" mode="link" @click="noticeClick(0)" wrapable>
 			<div class="van-row van-row--flex van-row--justify-center"  style="text-align:left">
 				<div class="van-col van-col--12">
-					时间:{{ config.notice.timeTypeText }}
+					{{ $t('h.time') }}:{{ config.notice.timeTypeText }}
 				</div>
 				<div class="van-col van-col--12">
-					线别:{{ config.notice.lineTypeText }}
+					{{ $t('h.line') }}:{{ config.notice.lineTypeText }}
 				</div>
 			</div>
 			<div class="van-row van-row--flex van-row--justify-center"  style="text-align:left">
 				<div class="van-col van-col--12">
-					班组:{{ config.notice.classTypeText }}
+					{{ $t('h.workShift') }}:{{ config.notice.classTypeText }}
 				</div>
 				<div class="van-col van-col--12">
-					图表属性:{{ config.notice.chartPropertiesText }}
+					{{ $t('h.chartProperties') }}:{{ config.notice.chartPropertiesText }}
 				</div>
 			</div>
 		</van-notice-bar>
 		<van-popup v-model="popupShow" position="right" :style="{ height: '100%', width:'100%' }" :close-on-click-overlay="false">
 			<div class="van-nav-bar van-nav-bar--fixed van-hairline--bottom">
 				<div class="van-nav-bar__title van-ellipsis">
-					筛选条件
+					{{ $t('h.filterCondition') }}
 				</div>
 			</div>
 			<div style="margin-top:46px;"></div>
 			<div role="separator" class="van-divider van-divider--hairline van-divider--content-center" style="border-color: rgb(25, 137, 250); color: rgb(25, 137, 250); padding: 0px 16px;">
-  			时间
+  			{{ $t('h.time') }}
 			</div>
 			<div class="van-row van-row--flex van-row--justify-center"  style="text-align:center">
 				<div class="van-col van-col--6" v-for="(item,index) in timeType" :key="index">
@@ -34,7 +34,7 @@
 				</div>
 			</div>
 			<div role="separator" class="van-divider van-divider--hairline van-divider--content-center" style="border-color: rgb(25, 137, 250); color: rgb(25, 137, 250); padding: 0px 16px;">
-  			线别
+  			{{ $t('h.line') }}
 			</div>
 			<div class="van-row van-row--flex van-row--justify-center"  style="text-align:center">
 				<div class="van-col van-col--6" v-for="(item,index) in lineType" :key="index">
@@ -42,7 +42,7 @@
 				</div>
 			</div>
 			<div role="separator" class="van-divider van-divider--hairline van-divider--content-center" style="border-color: rgb(25, 137, 250); color: rgb(25, 137, 250); padding: 0px 16px;">
-  			班组
+  			{{ $t('h.workShift') }}
 			</div>
 			<div class="van-row van-row--flex van-row--justify-center"  style="text-align:center">
 				<div class="van-col van-col--6" v-for="(item,index) in classType" :key="index">
@@ -50,7 +50,7 @@
 				</div>
 			</div>
 			<div role="separator" class="van-divider van-divider--hairline van-divider--content-center" style="border-color: rgb(25, 137, 250); color: rgb(25, 137, 250); padding: 0px 16px;">
-	  			图表属性
+	  			{{ $t('h.chartProperties') }}
 			</div>
 			<div class="van-row van-row--flex van-row--justify-center"  style="text-align:center;margin-top:5px;" v-for="(it,id) in Math.ceil(chartProperties.length/3)" :key="id">
 				<div class="van-col van-col--6" v-for="(item,index) in chartProperties.slice(id*3,id*3 + 3)" :key="index">
@@ -58,7 +58,7 @@
 				</div>
 			</div>
 			<div style="padding: 0px 16px;margin-top:30px">
-				<van-button type="primary" size="large" @click="closeClick()">确定</van-button>
+				<van-button type="primary" size="large" @click="closeClick()">{{ $t('h.confirm') }}</van-button>
 			</div>
 		</van-popup>
 	</div>
@@ -70,45 +70,25 @@
 			return {
 				popupShow:this.show,
 				statisMethod:'list',
-				insideChartType:[
-					{ text: '柱状图',   value: 'sgStatistic' },
-				],
 				userChartType:[],
 				
 				config:{
 					select:{
-						timeType        : null,
-						lineType        : null,
-						classType       : null,
-						chartProperties : null,
+						timeType: null,
+						lineType: null,
+						classType: null,
+						chartProperties: null,
 					},
 					notice:{
-						timeTypeText        : '',
-						lineTypeText        : '',
-						classTypeText       : '',
-						chartPropertiesText : ''
+						timeTypeText: '',
+						lineTypeText: '',
+						classTypeText: '',
+						chartPropertiesText: ''
 					}
 				},
-				timeType:[
-					{ text: '按天', value: 1},
-					{ text: '按周', value: 2},
-					{ text: '按月', value: 3},
-				],
-				classType:[
-					{ text: '全部', value: 'ALL'},
-					{ text: 'A', value: 'A'},
-					{ text: 'B', value: 'B'},
-					{ text: 'C', value: 'C'},
-					{ text: 'D', value: 'D'},
-				],
-				chartProperties:[
-					{ text: '面积', value: 'sumArea'},
-                    { text: '米数', value: 'sumLen'},
-                    { text: '车速', value: 'avgSpeed'},
-                    { text: '损耗', value: 'sumLoss'},
-                    { text: '停次', value: 'sumStops'}
-				],
-
+				timeType:[],
+				classType:[],
+				chartProperties:[],
 			}
 		},
 		methods:{
@@ -147,12 +127,33 @@
 				this.config.select.classType = this.classType[0].value
 				this.config.select.chartProperties = this.chartProperties[0].value
 			},
+			init() {
+				this.timeType = [
+					{ text: this.$i18n.t('h.day'), value: 1},
+					{ text: this.$i18n.t('h.week'), value: 2},
+					{ text: this.$i18n.t('h.month'), value: 3},
+				]
+				this.classType = [
+					{ text: this.$i18n.t('h.all'), value: 'ALL'},
+					{ text: 'A', value: 'A'},
+					{ text: 'B', value: 'B'},
+					{ text: 'C', value: 'C'},
+					{ text: 'D', value: 'D'},
+				]
+				this.chartProperties = [
+					{ text: this.$i18n.t('h.sumArea'), value: 'sumArea'},
+                    { text: this.$i18n.t('h.sumLen'), value: 'sumLen'},
+                    { text: this.$i18n.t('h.avgSpeed'), value: 'avgSpeed'},
+                    { text: this.$i18n.t('h.sumLoss'), value: 'sumLoss'},
+                    { text: this.$i18n.t('h.numOfStops'), value: 'sumStops'}
+				]
+			}
 		},
 		mounted(){
-			
+			//this.init()
 		},
 		created(){
-			
+			this.init()
 		},
 		computed:{
 			timeTypeChange(){

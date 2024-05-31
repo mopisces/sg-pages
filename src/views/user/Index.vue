@@ -1,38 +1,32 @@
 <template>
 	<div>
-		<!-- <el-button type="primary"  @click="handleAdd()">添加</el-button>
-		<el-table :data="list" :stripe="true" :height="config.table.height" v-if="config.table.height">
-			<el-table-column prop="user" label="用户名" width="100" fixed></el-table-column>
-			<el-table-column prop="pass" label="密码" width="100"></el-table-column>
-			<el-table-column label="操作">
-				<template slot-scope="scope">
-					<el-button type="primary" size="mini" @click="handleEdit(scope.row)">修改</el-button>
-					<el-button type="danger" size="mini" @click="handleStatus(scope)">
-						删除
-					</el-button>
-				</template>
-			</el-table-column>
-		</el-table> -->
 		<vxe-toolbar>
 			<template #buttons>
-				<van-button type="info" @click="handleAdd()">添加用户</van-button>
+				<van-button type="info" @click="handleAdd()">{{$t('h.addUser')}}</van-button>
 			</template>
 		</vxe-toolbar>
 		<vxe-table ref="user" stripe :height="config.table.height" :data="list" :row-key="true">
-			<vxe-table-column title="用户名" field="user" min-width="10"></vxe-table-column>
-        	<vxe-table-column title="密码" field="pass"  min-width="30"></vxe-table-column>
-        	<vxe-table-column title="操作" min-width="50">
+			<vxe-table-column :title="$t('h.userName')" field="user" min-width="10"></vxe-table-column>
+        	<vxe-table-column :title="$t('h.userPass')" field="pass"  min-width="30"></vxe-table-column>
+        	<vxe-table-column :title="$t('h.modify')" min-width="50">
         		<template #default="{ row }">
-        			<van-button type="warning" size="mini" @click="handleEdit(row)">修改</van-button>
-        			<van-button type="danger" size="mini" @click="handleStatus(row)">删除</van-button>
+        			<van-button type="warning" size="mini" @click="handleEdit(row)">{{$t('h.modify')}}</van-button>
+        			<van-button type="danger" size="mini" @click="handleStatus(row)">{{$t('h.delete')}}</van-button>
         		</template>
         	</vxe-table-column>
 		</vxe-table>
-		<van-dialog v-model="show" :title="title" show-cancel-button close-on-popstate :before-close="checkData">
-			<van-field v-model="form.user" error required label="用户名" :disabled="form.edit == 1 ? true : false" />
-			<van-field v-model="form.pass" error required label="密码" placeholder="请输入密码" />
+		<van-dialog 
+			v-model="show" 
+			:title="form.type=='add'?$t('h.addUser'):$t('h.modifyUser')" 
+			show-cancel-button 
+			close-on-popstate 
+			:confirmButtonText="$t('h.confirm')"
+			:cancelButtonText="$t('h.cancel')"
+			:before-close="checkData"
+		>
+			<van-field v-model="form.user" error required :label="$t('h.userName')" :disabled="form.edit == 1 ? true : false" />
+			<van-field v-model="form.pass" error required :label="$t('h.userPass')" :placeholder="$t('h.enterUserPass')" />
 		</van-dialog>
-
 	</div>
 </template>
 <script>
@@ -47,17 +41,13 @@
 				},
 				list:[],
 				show:false,
-				title:'添加用户',
 				checked:false,
 				form:{
 					id:'',
 					user:'',
 					pass:'',
-					edit:0
-				},
-				rules:{
-					user:[{required:true,message:'请输入用户名'}],
-					pass:[{required:true,message:'请输入密码'}],
+					edit:0,
+					type: "add",
 				},
 				validator:{},
 			}
@@ -69,13 +59,13 @@
 				});
 			},
 			handleEdit(row){
-				this.title = '修改用户信息';
+				this.form.type = 'operate';
 				this.show = true;
 				this.form = row;
 				this.form.edit = 1;
 			},
 			handleAdd(){
-				this.title = '添加用户';
+				this.form.type = 'add';
 				this.form = this.$options.data().form;
 				this.show = true;
 			},
@@ -162,10 +152,19 @@
 				}
 			},
 			init(){
-				this.$store.commit('layout/setTitle','用户管理')
+				this.$store.commit('layout/setTitle', this.$i18n.t('h.userManagement'))
 				this.$store.commit('layout/setActive','menu')
 				this.fetchData()
-				this.validator = new schema(this.rules)
+				this.validator = new schema({
+					user:[{
+						required: true, 
+						message: this.$i18n.t('h.enterUserName')
+					}],
+					pass:[{
+						required: true, 
+						message: this.$i18n.t('h.enterUserPass')
+					}],
+				})
 			},
 			setElementSize(){
 				this.config.table.height = window.screen.height - 96 - 52

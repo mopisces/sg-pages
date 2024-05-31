@@ -1,38 +1,46 @@
 <template>
 	<div>
-		<van-nav-bar :title="title" left-text="返回" right-text="刷新" left-arrow @click-left="onClickLeft" @click-right="reload" :fixed="true" style="z-index:-1">
-		</van-nav-bar>
+		<van-nav-bar 
+			:title="title" 
+			:left-text="$t('h.back')" 
+			:right-text="$t('h.refresh')" 
+			left-arrow 
+			@click-left="onClickLeft" 
+			@click-right="reload" 
+			:fixed="true" 
+			style="z-index:-1"
+		></van-nav-bar>
 		<div class="layout-content">
 			<router-view v-if="isRouterAlive"/>
 		</div>
 		<van-tabbar v-model="active">
 			<van-tabbar-item name="monitor" to="/sg/monitor">
 				<van-icon slot="icon" name="volume-o"/>
-				生管监控
+				{{ $t('h.monitoring') }}
 			</van-tabbar-item>
 			<van-tabbar-item name="bl" to="/sg/bl">
 				<van-icon slot="icon" name="points"/>
-				备料
+				{{ $t('h.mp') }}
 			</van-tabbar-item>
 			<van-tabbar-item name="blms" to="/sg/blms">
 				<van-icon slot="icon" name="orders-o" />
-				备料米数
+				{{ $t('h.mpm') }}
 			</van-tabbar-item>
 			<van-tabbar-item name="scdd" to="/sg/scdd">
 				<van-icon slot="icon" name="records" />
-				生产订单
+				{{ $t('h.prodOrd') }}
 			</van-tabbar-item>
 			<van-tabbar-item name="wgdd" to="/sg/wgdd">
 				<van-icon slot="icon" name="completed"/>
-				完工订单
+				{{ $t('h.completeOrd') }}
 			</van-tabbar-item>
 			<van-tabbar-item name="menu" to="/sg/menu" v-if="config.haveMenu">
 				<van-icon slot="icon" name="wap-home-o"/>
-				菜单
+				{{ $t('h.menu') }}
 			</van-tabbar-item>
 			<van-tabbar-item name="sgLogout" @click="logout">
 				<van-icon slot="icon" name="down"/>
-				退出
+				{{ $t('h.logout') }}
 			</van-tabbar-item>
 		</van-tabbar>
 	</div>
@@ -62,7 +70,9 @@
 			},
 			logout(){
 				this.$dialog.confirm({
-					message: '确认退出?'
+					message: this.$i18n.t('h.confirmLogout'),
+					confirmButtonText: this.$i18n.t('h.confirm'),
+					cancelButtonText: this.$i18n.t('h.cancel')
 				}).then(() => {
 					cleanUserInfo()
 					this.$router.push('/login')
