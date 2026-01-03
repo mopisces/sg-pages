@@ -18,8 +18,8 @@
 				:max-date="max" 
 				type="date" 
 				show-toolbar 
-				:confirm-button-text="$t('confirm')"
-				:cancel-button-text="$t('cancel')"
+				:confirm-button-text="$t('h.confirm')"
+				:cancel-button-text="$t('h.cancel')"
 				@cancel="onCancel" 
 				@confirm="onConfirm"
 			>

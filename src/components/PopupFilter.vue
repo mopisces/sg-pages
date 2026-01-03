@@ -25,8 +25,19 @@
 </template>
 
 <script>
+	import { Button, Popup } from "vant"
+
 	export default {
-		props:['filterShow'],
+		components:{
+			[Button.name]: Button,
+			[Popup.name]: Popup,
+		},
+		props: {
+			filterShow: {
+				type: Boolean,
+				default: false
+			}
+		},
 		data(){
 			return {
 				show:this.filterShow,

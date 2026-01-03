@@ -4,7 +4,7 @@
 			<van-dropdown-item v-model="selectItem" :options="dropDownOption" />
 			<van-dropdown-item v-model="formData.active" :options="config.dropDown.activeOption" />
 		</van-dropdown-menu>
-		<vxe-table ref="blms" stripe border :height="height" :data="tableData">
+		<vxe-table ref="blms" stripe border :height="height" :data="tableData" :cell-style="cellStyle" :header-cell-style="headerCellStyle">
 			<vxe-table-column :title="$t('h.glueMachine')" field="糊机备纸" min-width="130"></vxe-table-column>
 			<vxe-table-column :title="'SF1'+$t('h.flutingPaper')" field="SF1芯纸" min-width="130"></vxe-table-column>
 			<vxe-table-column :title="'SF1'+$t('h.liningPaper')" field="SF1面纸" min-width="130"></vxe-table-column>
@@ -75,8 +75,18 @@
 				})
 			},
 			setElementSize(){
-				this.$store.commit('layout/setHeight', window.screen.height - 96 - 50)
-			}
+				this.$store.commit('layout/setHeight', window.screen.height - 96 - 40)
+			},
+			headerCellStyle({ column }) {
+				return {
+					padding: '2px 0'
+				}
+			},
+			cellStyle({ row, rowIndex, column }) {
+				return {
+					padding: '0',
+				}
+			},
 		},
 		created(){
 			this.$store.commit('layout/setTitle', this.$i18n.t('h.mpm'))

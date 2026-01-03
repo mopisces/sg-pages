@@ -4,7 +4,7 @@
 			<van-dropdown-item v-model="selectItem" :options="dropDownOption" />
 		</van-dropdown-menu>
 		<div v-if="lineNew==0">
-			<vxe-table stripe :height="height" :data="tableData">
+			<vxe-table :cell-style="cellStyle" :header-cell-style="headerCellStyle"  stripe :height="height" :data="tableData">
 	        	<vxe-table-column :title="$t('h.num')" field="sn" min-width="10"></vxe-table-column>
 	        	<vxe-table-column :title="$t('h.width')" field="width"  min-width="30"></vxe-table-column>
 	        	<vxe-table-column :title="$t('h.prodPaper')" min-width="50" field="paperMaterial">
@@ -117,8 +117,18 @@
 				});
 			},
 			setElementSize(){
-				this.$store.commit('layout/setHeight', window.screen.height - 96 - 50)
-			}
+				this.$store.commit('layout/setHeight', window.screen.height - 96 - 40)
+			},
+			headerCellStyle({ column }) {
+				return {
+					padding: '2px 0'
+				}
+			},
+			cellStyle({ row, rowIndex, column }) {
+				return {
+					padding: '0',
+				}
+			},
 		},
 		created(){
 			this.$store.commit('layout/setTitle', this.$i18n.t('h.mp'))

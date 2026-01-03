@@ -14,6 +14,12 @@ const statis = {
 			statis_type : data.chartProperties
 		}
 		return post( '/statis/getStatisData', postData)
+	},
+	fetchPaperFinishList( data ) {
+		return post( '/statis/fetchPaperFinishList', data)
+	},
+	fetchPaperFinishAnalysisData(data) {
+		return post( '/statis/fetchPaperFinishAnalysisData', data)
 	}
 }
 

@@ -5,16 +5,16 @@
 			:left-text="$t('h.back')" 
 			:right-text="$t('h.refresh')" 
 			left-arrow 
-			@click-left="onClickLeft" 
-			@click-right="reload" 
 			:fixed="true" 
 			style="z-index:-1"
+			@click-left="onClickLeft" 
+			@click-right="reload" 
 		></van-nav-bar>
 		<div class="layout-content">
 			<router-view v-if="isRouterAlive"/>
 		</div>
 		<van-tabbar v-model="active">
-			<van-tabbar-item name="monitor" to="/sg/monitor">
+			<van-tabbar-item name="monitor" to="/sg/choose">
 				<van-icon slot="icon" name="volume-o"/>
 				{{ $t('h.monitoring') }}
 			</van-tabbar-item>
@@ -120,3 +120,10 @@
 		}
 	}
 </script>
+
+
+<style type="text/css">
+	.van-tabbar--fixed {
+		z-index: 10 !important;
+	}
+</style>

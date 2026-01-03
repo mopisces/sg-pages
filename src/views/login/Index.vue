@@ -111,7 +111,7 @@
 					if( res.errorCode == '00000' ){
 						let userInfo = Object.assign(res.result)
 						setUserInfo( userInfo ).then(res=>{
-							this.$router.push('/sg/monitor')
+							this.$router.push('/sg/choose')
 						})
 						localStorage.setItem('karry-sg-user',JSON.stringify(this.formData))
 					}
@@ -122,7 +122,6 @@
 				this.year = dateYear.getFullYear()
 			},
 			init(){
-				this.formData.langs = localStorage.getItem("karry-sg-monitor-langs") || "zh"
 				this.getNowYear()
 				this.getFactoryName()
 				if( this.validator == null ) this.validator = new schema({
@@ -145,9 +144,9 @@
 			this.init()
 			try{
 				let user = localStorage.getItem('karry-sg-user');
-				if( user != null ){
-					this.formData.userName = user.userName;
-					this.formData.userPass = user.userPass;
+				const data = JSON.parse(user);
+				if( user ){
+					this.formData = data;
 				}
 			}catch( err ){
 				console.log(err)

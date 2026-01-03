@@ -18,19 +18,19 @@
 				<new-time-picker v-if="config.popup.timePicker.isFinishLoad" :dateTime.sync="filterForm.endDate" :minDate="pageConfig.minDate" :maxDate="pageConfig.maxDate" :label="$t('h.endDate')"></new-time-picker>
 			</div>
 		</popup-filter>
-		<div id="highcharts-container" :style="{width:config.chart.width + 'px',height:config.chart.height + 'px',}">
-		</div>
+		<div id="highcharts-container" :style="{width:config.chart.width + 'px',height:config.chart.height + 'px',}"></div>
 	</div>
 </template>
 <script>
 	import StatisFilterHeader from '@/components/StatisFilterHeader.vue'
 	import PopupFilter from '@/components/PopupFilter.vue'
 	import NewTimePicker from '@/components/NewTimePicker.vue'
+
 	export default {
 		components:{
 			StatisFilterHeader,
 			PopupFilter,
-			NewTimePicker
+			NewTimePicker,
 		},
 		data(){
 			return {

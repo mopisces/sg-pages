@@ -8,7 +8,7 @@
 					</van-dropdown-menu>
 				</van-col>
 				<van-col span="12">
-					<van-button size="large" @click="config.popup.filterShow = true" >{{ $t('h.filter') }}</van-button>
+					<van-button style="width: 100%;height: 30px;line-height:30px;" @click="config.popup.filterShow = true" >{{ $t('h.filter') }}</van-button>
 				</van-col>
 			</van-row>
 		</van-sticky>
@@ -343,4 +343,8 @@
 </script>
 <style type="text/css">
 	@import '~@/assets/style/card.css'
+	
+	/*.van-button {
+		line-height: 30px !important;
+	}*/
 </style>

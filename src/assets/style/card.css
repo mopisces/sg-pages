@@ -120,6 +120,14 @@
     width: 67%;
 }
 
+.card-body-item-20{
+    width: 20%;
+}
+
+.card-body-item-16{
+    width: 16.5%;
+}
+
 .page-color {
     background-color: #f1f1f1;
 }
@@ -139,4 +147,19 @@
 
 .gray-color {
     color: #909399;
+}
+
+::v-deep {
+    .uni-card {
+        margin: 8px !important;
+        padding: 0 !important;
+        
+        .uni-card__header {
+            padding: 8px !important;
+        }
+        
+        .uni-card__content {
+            padding: 8px !important;
+        }
+    }
 }

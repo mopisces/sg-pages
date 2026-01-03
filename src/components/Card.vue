@@ -99,13 +99,26 @@
 
 <style>
 	.uni-card {
-		margin: 0.625rem;
-		padding: 0 0.5rem;
+		margin: 0.625rem !important;
+		padding: 0 0.5rem !important;
 		border-radius: 0.25rem;
 		overflow: hidden;
 		font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif;
 		background-color: #fff;
 		flex: 1;
+	}
+
+	.uni-card__cover {
+		position: relative;
+		margin-top: 10px;
+		flex-direction: row;
+		overflow: hidden;
+		border-radius: 4px;
+	}
+
+	.uni-card__cover-image {
+		flex: 1;
+		vertical-align: middle;
 	}
 
 	.uni-card__header {
@@ -153,29 +166,29 @@
 	}
 	
 	.uni-card__header-content-subtitle {
-		font-size: 0.75rem;
+		font-size: 0.8rem;
 		margin-top: 0.3125rem;
 		color: #909399;
 	}
 
 	.uni-card__header-extra {
-		line-height: 0.75rem;
+		line-height: 0.8rem;
 	}
 
 	.uni-card__header-extra-text {
-		font-size: 0.75rem;
+		font-size: 0.8rem;
 		color: #909399;
 	}
 
 	.uni-card__content {
-		padding: 0.625rem;
-		font-size: 0.875rem;
+		padding: 0.5rem 0  !important;
+		font-size: 0.8rem;
 		color: #6a6a6a;
-		line-height: 1.375rem;
+		line-height: 0.8rem;
 	}
 
 	.uni-card__actions {
-		font-size: 0.75rem;
+		font-size: 0.8rem;
 	}
 
 	.uni-card--shadow {

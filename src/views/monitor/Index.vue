@@ -13,16 +13,16 @@
 				</tr>
 				<tr class="monitor-info">
 					<td class="top-td" @click="buildChart($t('h.numOfSlitters')+'('+$t('h.upperKinfe')+')',$t('h.kinfeNum'),'qds1')">
-						{{ updownInfo.qds1 }}
+						{{ updownInfo.qds }}
 					</td>
 					<td class="top-td" @click="buildChart($t('h.prodSlitters')+'('+$t('h.upperKinfe')+')',$t('h.kinfeNum'),'scds1')">
-						{{ updownInfo.scds1 }}
+						{{ updownInfo.scds }}
 					</td>
 					<td class="top-td" @click="buildChart($t('h.remainingSlitters')+'('+$t('h.upperKinfe')+')',$t('h.kinfeNum'),'syds1')">
-						{{ updownInfo.syds1 }}
+						{{ updownInfo.syds }}
 					</td>
 					<td class="top-td" @click="buildChart($t('h.badSlitters')+'('+$t('h.upperKinfe')+')',$t('h.kinfeNum'),'blds1')">
-						{{ updownInfo.blds1 }}
+						{{ updownInfo.blds }}
 					</td>
 				</tr>
 				<tr class="monitor-info">
@@ -232,6 +232,15 @@
 					<td colspan="2">{{ className }}{{ $t('h.workShift') }}</td>
 					<td colspan="2">{{ $t('h.currentOrd') }}</td>
 				</tr>
+				<tr v-if="config.isnew" class="monitor-info">
+					<td>{{ $t('h.totalArea') }}(㎡)</td>
+					<td colspan="2" @click="buildChart('？'+$t('h.workShift')+'/'+$t('h.totalArea'),$t('h.squareMeter'),'benban_zmj')">
+						{{ normalInfo.benban.zmj }}
+					</td>
+					<td colspan="2" @click="buildChart($t('h.currentOrd') + '/'+$t('h.totalArea'),$t('h.squareMeter'),'benbi_zmj')">
+						{{ normalInfo.benbi.zmj }}
+					</td>
+				</tr>
 				<tr class="monitor-info">
 					<td>{{ $t('h.totalMeters') }}(m)</td>
 					<td colspan="2" @click="buildChart('？'+$t('h.workShift')+'/'+$t('h.totalMeters'),$t('h.meter'),'benban_zms')">
@@ -351,19 +360,15 @@
 						keyName : ''
 					}
 				},
-				formData:{
-					/*activeItem : 0*/
-				},
-				socket:{},  //socket链接对象
 				className:'-',
 				updownInfo:{
-					'qds1'  : 0,
-	                'scds1' : 0,
-	                'syds1' : 0,
-	                'ddsy1' : 0,
-	                'blds1' : 0,
-	                'ddc1'  : 0,
-	                'qc1'   : 0,
+					'qds'  : 0,
+	                'scds' : 0,
+	                'syds' : 0,
+	                'ddsy' : 0,
+	                'blds' : 0,
+	                'ddc'  : 0,
+	                'qc'   : 0,
 	                'qds2'  : 0,
 	                'scds2' : 0,
 	                'syds2' : 0,
@@ -384,7 +389,8 @@
 	                    'tccs'  : 0,
 	                    'scjpf' : 0,
 	                    'hzl'   : 0,
-	                    'xbl'   : 0
+	                    'xbl'   : 0,
+	                   
 	                },
 	                'benbi': {
 	                    'zms'   : 0,
@@ -434,7 +440,8 @@
 	                    'tccs'  : 0,
 	                    'scjpf' : 0,
 	                    'hzl'   : 0,
-	                    'xbl'   : 0
+	                    'xbl'   : 0,
+	                     'zmj'   : 0
 	                },
 	                'benbi': {
 	                    'zms'   : 0,
@@ -448,7 +455,8 @@
 	                    'tccs'  : 0,
 	                    'scjpf' : 0,
 	                    'hzl'   : 0,
-	                    'xbl'   : 0
+	                    'xbl'   : 0,
+	                    'zmj'   : 0
 	                },
 	                'huji': {
 	                    'cs' : 0,
@@ -476,20 +484,6 @@
 		},
 		methods:{
 			getConfig(){
-				/*let self = this;
-				this.$request.common.getConfig().then(res=>{
-					if( res.errorCode == '00000' ){
-						res.result.forEach((item,index)=>{
-							self.config.dropDownOption.push({text:item.DB_FLAG,value:index,isnew:item.isnew,updown:item.updown,socketUrl:item.socketio.domain});
-						});
-					}
-				}).then(()=>{
-					this.$nextTick(()=>{
-						this.config.updown = this.config.dropDownOption[ this.selectItem ].updown;
-						this.config.isnew = this.config.dropDownOption[ this.selectItem ].isnew;
-						this.getSocket(this.config.dropDownOption[ this.selectItem ].socketUrl,this.selectItem)
-					});
-				});;*/
 				this.config.updown = this.dropDownOption[ this.selectItem ].updown
 				this.config.isnew = this.dropDownOption[ this.selectItem ].isnew
 				this.getSocket(this.dropDownOption[ this.selectItem ].socketUrl,this.selectItem)
@@ -497,7 +491,7 @@
 			getSocket( socketUrl, index ){
 				this.clearData()
 
-				this.socket = io(socketUrl,{
+				this.socket = io(socketUrl, {
 					timeout:3000
 				});
 
@@ -513,11 +507,12 @@
 							this.config.notice.text = this.$i18n.t('h.dataLenErr');
 						}
 						let udpData = JSON.parse(data).data
-						this.className = udpData.class
+						this.className = udpData != null && 'class' in udpData ? udpData.class : ""
 						if( this.config.updown ){
 							Object.assign(this.updownInfo, udpData)
 						}else{
 							Object.assign(this.normalInfo, udpData)
+							//console.log(this.normalInfo)
 						}
 						if( !this.config.chart.show ) return
 						if( this.config.updown ){
@@ -559,8 +554,8 @@
 				}
 				this.chart = new Highcharts.chart('chart-container',{
 					chart:{
-						type        : 'spline',
-						animation   : Highcharts.svg,
+						type: 'spline',
+						animation: Highcharts.svg,
 						marginRight : 10,
 					},
 					credits:{
@@ -608,7 +603,6 @@
 						}())
 					}]
 				});
-				
 				this.config.chart.keyName = keyName;
 				this.config.chart.show    = true;
 			},
@@ -618,7 +612,10 @@
 				if( this.config.chart.show ){
 					this.chart.setSize(undefined,1)
 				}
-				this.socket.close()
+				if( this.socket ) {
+					this.socket.close()
+				}
+				
 				this.config.notice.text = ''
 				this.getSocket(this.dropDownOption[ idx ].socketUrl, idx)
 			},
@@ -629,25 +626,14 @@
 				this.updownInfo = this.$options.data().updownInfo
 				this.normalInfo = this.$options.data().normalInfo
 			},
-			test(){
-				let socket = io('127.0.0.1:40000',{
-					timeout:3000
-				});
-
-				socket.on('SCLX', (data)=>{
-					console.log(data)
-				});
-
-				socket.on('XLK', (data)=>{
-					console.log(data)
-				});
-			}
+			floatNavClick() {
+				this.$router.push("/sg/monitorNew")
+			},
 		},
 		created(){
 			this.$store.commit('layout/setTitle', this.$i18n.t('h.monitoring'))
 			this.$store.commit('layout/setActive','monitor')
 			this.getConfig()
-			this.test()
 		},
 		mounted(){
 			Highcharts.setOptions({

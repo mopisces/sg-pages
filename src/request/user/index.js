@@ -7,7 +7,7 @@ const user = {
 	doEdit(data){
 		let postData = {
 			id      : data.id,
-			is_edit : data.edit,
+			is_edit : data.isEdit,
 			user    : data.user,
 			pass    : data.pass,
 		}

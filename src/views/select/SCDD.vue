@@ -13,10 +13,10 @@
 					<div style="padding: 5px 16px;">
 						<van-row gutter="20" type="flex" justify="center">
 							<van-col span="10">
-								<van-button type="danger" block round @click="resetClick">{{ $t('reset') }}</van-button>
+								<van-button type="danger" block round @click="resetClick">{{ $t('h.reset') }}</van-button>
 							</van-col>
 							<van-col span="10">
-								<van-button type="primary" block round @click="filterClick">{{ $t('filter') }}</van-button>
+								<van-button type="primary" block round @click="filterClick">{{ $t('h.filter') }}</van-button>
 							</van-col>
 						</van-row>
 					</div>

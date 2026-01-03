@@ -3,6 +3,7 @@
     border-collapse: collapse;
     table-layout: fixed;
 }
+
 .monitor-info > td {
     border: 0.08rem solid #e0e0e0;
     border-top: none;
@@ -14,7 +15,8 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
-.top-td{
+
+.top-td {
 	font-weight: bold;
 	color: green;
 }

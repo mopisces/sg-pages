@@ -16,3 +16,5 @@ new Vue({
 	i18n,
 	render: function (h) { return h(App) }
 }).$mount('#app')
+
+//"sg": "http://jxrs.leaper.ltd:41000/v1/sg"

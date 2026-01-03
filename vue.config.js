@@ -1,4 +1,7 @@
 module.exports = {
+	devServer: {
+		port: 50005
+	},
 	configureWebpack:{
 		performance:{
 			hints:'warning',

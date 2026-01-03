@@ -1,6 +1,8 @@
 export const h = {
 	userManagement: "Quản lý người dùng",
 	productionReport: "Báo cáo sản xuất",
+	paperFinish: "Cardboard hoàn thành",
+	report: "Báo cáo",
 	userName: "Tên đăng nhập",
 	addUser: "Thêm người dùng",
 	modifyUser: "Chỉnh sửa người dùng",
@@ -48,8 +50,11 @@ export const h = {
 	bad: "bad",
 	production: "production",
 	totalMeters: "total meters",
+	totalArea: "total area",
 	cutLen: "cut length",
 	currentOrd: "current order",
+	currentClass: "current-class",
+	color: "color",
 	orders: "orders",
 	unit: "unit",
 	meter: "m",
@@ -91,6 +96,41 @@ export const h = {
 	finishedText: "Không có nữa",
 	rememberFilertCondi: "Ghi nhớ điều kiện lọc (chỉ có hiệu lực trong lần đăng nhập này)",
 
+
+	// 纸板完工
+	analysis: "Phân tích",
+	analysisReport: "Báo cáo phân tích",
+	clickOpen: "Click để mở",
+	shiftCode: "Thay đổi",
+	cuttingQty: "Số dao cắt",
+	cuttingWasteQty: "Số lượng chất thải cắt",
+	goodLen: "Số lượng gạo tốt",
+	badLen: "Số lượng gạo xấu",
+	prodLen: "Sản xuất mét",
+	totalLen: "Tổng số mét",
+	goodSqm: "Bình phương tốt",
+	badSqm: "Bình phương xấu",
+	prodSqm: "Bình phương sản xuất",
+	trimSqm: "Cắt cạnh bình phương",
+	totalSqm: "Tổng bình phương",
+	badRate: "Tỷ lệ sản phẩm xấu",
+	trimRate: "Tỷ lệ cắt tỉa",
+	avgSpeed: "Tốc độ trung bình",
+	workTimeStr: "Giờ làm việc",
+	stopTimeStr: "Khi dừng",
+	stops: "Dừng lại",
+	orderSource: "Nguồn order",
+	prodDataAnalysis: "Phân tích dữ liệu sản xuất toàn diện",
+	machineDataAnalysis: "Phân tích dữ liệu bàn sản xuất",
+	layer: "Giấy cho bàn máy",
+	actualSqm: "Bình phương bằng giấy",
+	wasteSqm: "Mất bình phương",
+	totalWT: "Trọng lượng giấy sản xuất",
+	actualWT: "Trọng lượng giấy thời gian",
+	wasteWT: "Mất trọng lượng giấy",
+	wasteRate: "Tỷ lệ mất giấy",
+
+
 	socketErr: "socket connect err",
 	socketTimeOut: "socket connect timeout",
 	connErr: "connect error",
@@ -119,6 +159,11 @@ export const h = {
 	endDate: "Ngày kết thúc",
 	err404: "404,sorry the page cannot be found",
 	selectLang: "select-lang",
+	rangeDate: "range-date",
+	workShopAdd: "work-shop-add",
+
+	oldView: "old-view",
+	newView: "new-view",
 
 	request: "request",
 	success: "success",
@@ -135,5 +180,7 @@ export const h = {
 	allow: "allow",
 	support: "support",
 	unsupport: "not support",
-	loading: "loading"
+	loading: "loading",
+
+	baseUrlUpdated: 'Base URL updated successfully'
 }

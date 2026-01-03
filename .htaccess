@@ -1,11 +1,25 @@
+# 禁止目录列表
+Options -Indexes
+
+# 开启重写功能
 <IfModule mod_rewrite.c>
   Options +FollowSymlinks
   RewriteEngine On
-  
-  RewriteCond %{REQUEST_URI} ^(.*)$
-  RewriteRule ^/index\.html$ - [L,NC]
-  
-  RewriteCond %{REQUEST_FILENAME} !-d
+
+  # 禁止查询字符串中含有 php 关键词
+  RewriteCond %{QUERY_STRING} ^.*php.*$ [NC]
+  RewriteRule ^(.*)$ - [F,L]
+
+  # 禁止直接访问 .php 文件（防止意外执行）
+  RewriteRule ^.*\.php$ - [F,L]
+
+  # 禁止在某些目录中执行 PHP 文件
+  RewriteRule ^uploads/.*\.php$ - [F,NC]
+  RewriteRule ^data/.*\.php$ - [F,NC]
+  RewriteRule ^templets/.*\.php$ - [F,NC]
+
+  # 将 index.html 作为默认入口
   RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteRule ^(.*)$ index.html [L]
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^ index.html [L]
 </IfModule>
